@@ -1,20 +1,22 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
+const SPEED = 7.0
 const JUMP_VELOCITY = 4.5
-@onready var pivot = $Pivot
+@onready var pivot = $Pivot # Gira la camera dentro il giocatore
 @export var sensibility = 0.1
-@onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer
+@onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer # Nodo animazione dentro al PlayerModel
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED # Nascondi cursore per giocare
 
 func _input(event):
+	# Gira l'intero Player nodo (CharacterBody3D)
 	if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * sensibility))
 		pivot.rotate_x(deg_to_rad(event.relative.y * sensibility))
-		pivot.rotation.x = clamp(pivot.rotation.x, deg_to_rad(-90), deg_to_rad((45)))
+		# La camera si muove su e giu massimo tra -45 e 45 gradi
+		pivot.rotation.x = clamp(pivot.rotation.x, deg_to_rad(-45), deg_to_rad((45)))
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -27,9 +29,9 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_pressed("attack"):
-		playerAnimation.play("attack", -1, 2)
+		playerAnimation.play("attack", -1, 2) # Riproduci animazione 'attack' in velocita 2x
 	else:
-		playerAnimation.play("Armature|Walk", -1)
+		playerAnimation.play("Armature|Walk", -1) # Animazione default
 	
 
 	# Get the input direction and handle the movement/deceleration.
