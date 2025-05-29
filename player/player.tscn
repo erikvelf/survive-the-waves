@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dm4bni2rs2ujr"]
 
-[ext_resource type="PackedScene" uid="uid://cnopmgo5xvtod" path="res://sahur.tscn" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://dwonmc57t602o" path="res://player.gd" id="1_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://cnopmgo5xvtod" path="res://player/sahur.tscn" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://dwonmc57t602o" path="res://player/player.gd" id="1_i3pqv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_onrkg"]
 margin = 0.795

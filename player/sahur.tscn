@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cnopmgo5xvtod"]
 
-[ext_resource type="PackedScene" uid="uid://blhnnnipb2mvq" path="res://player.fbx" id="1_hl1tu"]
+[ext_resource type="PackedScene" uid="uid://blhnnnipb2mvq" path="res://player/player.fbx" id="1_hl1tu"]
 [ext_resource type="Animation" uid="uid://dhrfwjob4qib5" path="res://ready-animations/standing_run_forward.res" id="2_oejbb"]
 
 [sub_resource type="Animation" id="Animation_hl1tu"]

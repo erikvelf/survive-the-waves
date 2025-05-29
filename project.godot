@@ -28,6 +28,12 @@ window/size/viewport_height=840
 
 enabled=PackedStringArray("res://addons/mixamo_animation_retargeter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://player/": "green"
+}
+
 [importer_defaults]
 
 scene={
