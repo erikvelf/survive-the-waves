@@ -3,9 +3,24 @@ extends CharacterBody3D
 
 const SPEED = 7.0
 const JUMP_VELOCITY = 4.5
+const DAMAGE = 40
 @onready var pivot = $Pivot # Gira la camera dentro il giocatore
 @export var sensibility = 0.1
 @onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer # Nodo animazione dentro al PlayerModel
+@onready var hitbox: Area3D = $Hitbox
+
+func attack():
+	var enemies = hitbox.get_overlapping_bodies()
+	for enemy in enemies:
+		if enemy.has_method("hurt"):
+			enemy.hurt(DAMAGE)
+
+func setStateIdle():
+	playerAnimation.play("Armature|Walk", 0.05) # 0.05 sarebbero il passaggio da un animazione all altra in maniera liscia
+
+func setStateAttack():
+	playerAnimation.play("attack", 0.05, 1.2)
+	attack()
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED # Nascondi cursore per giocare
@@ -29,7 +44,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_pressed("attack"):
-		playerAnimation.play("attack", -1, 2) # Riproduci animazione 'attack' in velocita 2x
+		setStateAttack() # Riproduci animazione 'attack' in velocita 2x
 	else:
 		playerAnimation.play("Armature|Walk", -1) # Animazione default
 	
