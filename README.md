@@ -1,55 +1,38 @@
-# Mixamo Animation Retargeter for Godot 4.3
+# Survival
 
-This plugin simplifies the process of importing and retargeting Mixamo animations in Godot 4.x projects.
+Gioco in Godot 4 in 3D dove tu devi sopravvivere alle ondate di nemici.
 
-## Features
+## Giocatore
 
-- Adds a "Retarget Mixamo Animation" option to the right-click menu for FBX files in the FileSystem dock.
-- Automatically sets up the correct import settings for Mixamo animations.
-- Supports batch processing of multiple FBX files.
-- Saves retargeted animations as separate .res files that can be added to Animation Libraries.
+- Healt: 100
+- Damage: 40
+- Speed: 7
+- AttackCoolDownTimer: 0.5s Speed:
 
-## Installation
+## Nemici
 
-1. Download or clone this repository.
-2. Copy the `addons/mixamo_animation_retargeter` folder into your Godot project's `addons` folder.
-3. Enable the plugin in Project Settings -> Plugins.
+Il gioco ha 3 tipi di nemici:
 
-## Usage
+- EnemySmall: il piu piccolo, il piu scarso e il piu svelto, ma prevalgono nelle
+  onde di quantita
+- EnemyMedium: piu grande di EnemySmall
+- EnemyBig: Il boss finale
 
-1. Import your Mixamo FBX file(s) into your Godot project using ufbx.
-2. In the FileSystem dock, right-click on the FBX file(s) you want to retarget.
-3. Select "Retarget Mixamo Animation" from the context menu.
-4. Choose a destination folder for the exported animation(s).
-5. The plugin will automatically update the import settings, retarget the animation(s), and save them as .res files in the specified folder.
-6. Ensure your character model has a Skeleton3D node named "Skeleton" for the exported animations to work correctly. 
-7. Ensure your Character Skeleton is also retargeted using Bone Mapping. This ensures both the animation and the skeleton will share the same bone names.
-8. Add the exported .res files to an AnimationLibrary and you should be able to play the animations in your scene.
+### Struttura del nemico
 
-## Requirements
+```
+CharacterBody3D (tipo di nemico)
+├── AttackCoolDownTimer (Timer)
+├── MoveFrequencyTimer (Timer che definisce quanto il mob deve aspettare per muoversi, ottimo per rendere i nemici piu forti piu ritardati, dando a te la possibilita di evaderli)
+├── CollisionShape3D
+└── EnemyModel (modello 3D del modello)
+└── HurtSound (suono di danno come una scimmia)
+└── EnemySound (souno normale, tipo una scimmia)
+```
 
-- Godot 4.3
-
-## Configuration
-
-The plugin uses a predefined bone map for Mixamo animations. If you need to customize the bone mapping, you can modify the `mixamo_bone_map.tres` file in the plugin folder.
-
-## Known Issues
-
-- Untested with older Godot versions.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-GNU GPLv3
-
-## Credits
-
-Developed by Matt Marcin @ RaidTheory
-
-## Disclaimer
-
-This plugin is not affiliated with or endorsed by Mixamo or Adobe. Mixamo and its logo are registered trademarks of Adobe Inc. All rights to Mixamo assets and branding belong to Adobe Inc.
+| Caratteristiche | EnemySmall | EnemyMedium | EnemyBig |
+| --------------- | ---------- | ----------- | -------- |
+| Health          | 70         | 220         | 410      |
+| Damage          | 7          | 25          | 45       |
+| Speed           | 6          | 5           | 4        |
+| AttackCoolDown  | 1          | 2           | 4        |
