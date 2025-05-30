@@ -26,11 +26,12 @@ window/size/viewport_height=840
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/mixamo_animation_retargeter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg", "res://addons/mixamo_animation_retargeter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
 
 [file_customization]
 
 folder_colors={
+"res://components/": "blue",
 "res://enemies/": "orange",
 "res://player/": "green"
 }
@@ -98,7 +99,8 @@ attack={
 [layer_names]
 
 3d_physics/layer_1="world"
-3d_physics/layer_2="enemies"
+3d_physics/layer_2="player"
+3d_physics/layer_3="enemy"
 
 [shader_globals]
 
