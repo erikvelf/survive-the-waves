@@ -1,15 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://dm4bni2rs2ujr"]
+[gd_scene load_steps=9 format=3 uid="uid://dm4bni2rs2ujr"]
 
 [ext_resource type="PackedScene" uid="uid://cnopmgo5xvtod" path="res://player/sahur.tscn" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://dwonmc57t602o" path="res://player/player.gd" id="1_i3pqv"]
+[ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="3_g1dw6"]
+[ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="5_qjkh3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_onrkg"]
 margin = 0.795
 radius = 0.289198
 height = 1.84294
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_rkbax"]
-radius = 0.613367
+[sub_resource type="SphereShape3D" id="SphereShape3D_yw30f"]
+radius = 0.757173
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g6k8r"]
+radius = 0.402945
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_i3pqv")
@@ -36,12 +42,32 @@ margin = 1.0
 [node name="Camera3D" type="Camera3D" parent="Pivot/SpringArm3D"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -3.49691e-07, 0, 4)
 
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_yw30f")
+metadata/_custom_type_script = "uid://d06olc43j4g25"
+
 [node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.502706)
+collision_layer = 3
+collision_mask = 0
+script = ExtResource("3_g1dw6")
+damage = 40
+metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.559498)
-shape = SubResource("SphereShape3D_rkbax")
+shape = SubResource("SphereShape3D_yw30f")
 
-[node name="AttackCooldownTimer" type="Timer" parent="."]
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_qjkh3")
+health = NodePath("../Health")
+metadata/_custom_type_script = "uid://2865ivc26bmt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_g6k8r")
 
 [editable path="PlayerModel"]
