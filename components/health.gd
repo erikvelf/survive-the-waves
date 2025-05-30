@@ -63,10 +63,11 @@ func set_health(value: int):
 		health = clamped_value
 		health_changed.emit(diff)
 		
-		if health == 0:
-			health_depeleted.emit()
+	if health == 0:
+		health_depeleted.emit()
+		print("I am health depleted")
 
-func get_health(value: int):
+func get_health():
 	return health
 
 	
