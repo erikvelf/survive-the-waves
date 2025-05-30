@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://dxhot3rikgje3"]
+
+[ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="1_0ruj4"]
+[ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="2_ocl2e"]
+[ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="3_1sok1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dtrtp"]
+radius = 0.618429
+height = 2.04562
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4u85v"]
+radius = 0.698012
+height = 2.26253
+
+[node name="GenericEnemy" type="CharacterBody3D"]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("1_0ruj4")
+metadata/_custom_type_script = "uid://d06olc43j4g25"
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+
+[node name="ActivateHurtBox" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="AttackCooldown" type="Timer" parent="."]
+
+[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_ocl2e")
+health = NodePath("../Health")
+metadata/_custom_type_script = "uid://2865ivc26bmt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.146477, 1, 0)
+shape = SubResource("CapsuleShape3D_dtrtp")
+
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_1sok1")
+metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 1, 0)
+shape = SubResource("CapsuleShape3D_4u85v")
+
+[connection signal="health_depeleted" from="Health" to="." method="die"]
+[connection signal="received_damage" from="Hurtbox" to="." method="_on_hurtbox_received_damage"]
