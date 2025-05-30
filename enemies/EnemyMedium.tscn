@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://dygsdoqn82deh"]
+
+[ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_iiqbo"]
+[ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_medium.gd" id="1_xiv3h"]
+[ext_resource type="PackedScene" uid="uid://hvicyqyeyndq" path="res://enemies/models/EnemyMedium.glb" id="2_6ggex"]
+[ext_resource type="AudioStream" uid="uid://cqnpeqly87s45" path="res://enemies/test_enemy/hit.mp3" id="4_q5333"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xiv3h"]
+
+[node name="EnemyMedium" type="Node3D"]
+script = ExtResource("1_xiv3h")
+
+[node name="GenericEnemy" parent="." instance=ExtResource("1_iiqbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Health" parent="GenericEnemy" index="0"]
+max_health = 220
+
+[node name="CollisionShape" parent="GenericEnemy" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.150845, 0, 0)
+shape = SubResource("CapsuleShape3D_xiv3h")
+
+[node name="HurtSound" parent="GenericEnemy" index="2"]
+stream = ExtResource("4_q5333")
+
+[node name="AttackCooldown" parent="GenericEnemy" index="4"]
+wait_time = 2.0
+
+[node name="model" parent="." instance=ExtResource("2_6ggex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[connection signal="health_depeleted" from="GenericEnemy/Health" to="." method="_on_health_health_depeleted"]
+
+[editable path="GenericEnemy"]

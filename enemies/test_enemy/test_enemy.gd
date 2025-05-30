@@ -24,7 +24,7 @@ func enable_hurtbox():
 	hurtbox.set_deferred("disabled", false)
 	print("hurtbox enabled")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if health <= 0:
 		print("Enemy died")
 		self.queue_free()
