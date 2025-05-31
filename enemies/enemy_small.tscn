@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://drceh860tqjpr"]
+
+[ext_resource type="Script" uid="uid://b13uikn6l0hy6" path="res://enemies/enemy_small.gd" id="1_rrjw4"]
+[ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_tyddy"]
+[ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="2_rrjw4"]
+[ext_resource type="PackedScene" uid="uid://bvb3xxodveny7" path="res://enemies/models/EnemySmall.glb" id="2_wljif"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_rrjw4"]
+height = 1.49686
+radius = 0.494141
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lv3pj"]
+height = 1.46939
+radius = 0.828125
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_aoweh"]
+height = 1.5
+radius = 1.05322
+
+[node name="EnemySmall" type="Node3D"]
+script = ExtResource("1_rrjw4")
+
+[node name="GenericEnemy" parent="." instance=ExtResource("1_tyddy")]
+speed = 6
+
+[node name="Health" parent="GenericEnemy" index="0"]
+max_health = 90
+
+[node name="CollisionShape" parent="GenericEnemy" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.748428, 0)
+shape = SubResource("CylinderShape3D_rrjw4")
+
+[node name="HurtSound" parent="GenericEnemy" index="2"]
+stream = ExtResource("2_rrjw4")
+
+[node name="CollisionShape3D" parent="GenericEnemy/Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74976, 0)
+shape = SubResource("CylinderShape3D_lv3pj")
+
+[node name="Hitbox" parent="GenericEnemy" index="4"]
+damage = 10
+
+[node name="CollisionShape3D" parent="GenericEnemy/Hitbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+shape = SubResource("CylinderShape3D_aoweh")
+
+[node name="Sketchfab_Scene" parent="GenericEnemy" instance=ExtResource("2_wljif")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.5, 0, 1.31134e-07, 0, -1.5, 0, 0, 0)
+
+[connection signal="health_depeleted" from="GenericEnemy/Health" to="." method="_on_health_health_depeleted"]
+
+[editable path="GenericEnemy"]

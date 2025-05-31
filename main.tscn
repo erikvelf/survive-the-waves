@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvb6eriwqjid0"]
+[gd_scene load_steps=6 format=3 uid="uid://dvb6eriwqjid0"]
 
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dm4bni2rs2ujr" path="res://player/player.tscn" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://dygsdoqn82deh" path="res://enemies/EnemyMedium.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dygsdoqn82deh" path="res://enemies/enemy_medium.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://drceh860tqjpr" path="res://enemies/enemy_small.tscn" id="4_lquwl"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_1bvp3")
@@ -11,6 +12,9 @@ script = ExtResource("1_1bvp3")
 [node name="World" parent="." instance=ExtResource("1_ig7tw")]
 
 [node name="Player" parent="." instance=ExtResource("2_0xm2m")]
+
+[node name="EnemySmall" parent="." instance=ExtResource("4_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 
 [node name="EnemyMedium" parent="." instance=ExtResource("4_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.28696, 0, 4.82073)

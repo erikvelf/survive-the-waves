@@ -12,6 +12,7 @@ script = ExtResource("1_xiv3h")
 
 [node name="GenericEnemy" parent="." instance=ExtResource("1_iiqbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+speed = 5
 
 [node name="Health" parent="GenericEnemy" index="0"]
 max_health = 220

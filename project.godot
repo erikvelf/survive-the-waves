@@ -26,7 +26,7 @@ window/size/viewport_height=840
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg", "res://addons/mixamo_animation_retargeter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
+enabled=PackedStringArray("res://addons/mixamo_animation_retargeter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
 
 [file_customization]
 
