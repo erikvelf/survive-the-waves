@@ -1,10 +1,13 @@
 extends CharacterBody3D
 
-const SPEED = 7.0
+const MAX_SPEED: float = 7.0
+const MIN_SPEED: float = 5.0
+var speed: float = 7.0
 const JUMP_VELOCITY = 4.5
 const DAMAGE = 40
 @onready var pivot = $Pivot # Gira la camera dentro il giocatore
 @export var sensibility = 0.1
+@onready var playerModel: Node3D = $PlayerModel
 @onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer # Nodo animazione dentro al PlayerModel
 #@onready var hitbox: Hitbox = $Hitbox
 @onready var hurtbox: Hurtbox = $Hurtbox
@@ -49,16 +52,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		go_idle()
 	
+	if Input.is_action_pressed("left_shift"):
+		speed = MIN_SPEED
+	else:
+		speed = MAX_SPEED
+	
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_right", "move_left", "move_back", "move_forward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
