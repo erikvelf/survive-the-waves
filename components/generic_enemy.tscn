@@ -22,11 +22,6 @@ metadata/_custom_type_script = "uid://d06olc43j4g25"
 
 [node name="HurtSound" type="AudioStreamPlayer" parent="."]
 
-[node name="ActivateHurtBox" type="Timer" parent="."]
-wait_time = 0.5
-
-[node name="AttackCooldown" type="Timer" parent="."]
-
 [node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 collision_layer = 0

@@ -23,9 +23,6 @@ shape = SubResource("CapsuleShape3D_xiv3h")
 [node name="HurtSound" parent="GenericEnemy" index="2"]
 stream = ExtResource("4_q5333")
 
-[node name="AttackCooldown" parent="GenericEnemy" index="4"]
-wait_time = 2.0
-
 [node name="model" parent="." instance=ExtResource("2_6ggex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
