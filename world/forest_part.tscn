@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ca4gwvhcxi4gx"]
+
+[ext_resource type="PackedScene" uid="uid://h0xxn8al8pw0" path="res://world/tree_cluster.tscn" id="1_8owvu"]
+
+[node name="ForestPart" type="Node3D"]
+
+[node name="TreeCluster" parent="." instance=ExtResource("1_8owvu")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, -45)
+
+[node name="TreeCluster2" parent="." instance=ExtResource("1_8owvu")]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 22, 0, -40)
+
+[node name="TreeCluster3" parent="." instance=ExtResource("1_8owvu")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 34, 0, -26)
+
+[node name="TreeCluster4" parent="." instance=ExtResource("1_8owvu")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 39, 0, -10)
