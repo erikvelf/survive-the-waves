@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-
 const SPEED = 7.0
 const JUMP_VELOCITY = 4.5
 const DAMAGE = 40
@@ -24,6 +23,7 @@ func go_idle():
 	set_is_hitbox_disabled(true)
 
 func _ready() -> void:
+	add_to_group("Player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED # Nascondi cursore per giocare
 
 func _input(event):

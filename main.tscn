@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dvb6eriwqjid0"]
 
-[ext_resource type="Script" uid="uid://bf7sjam3i0ivl" path="res://main.gd" id="1_1bvp3"]
+[ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dm4bni2rs2ujr" path="res://player/player.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://dygsdoqn82deh" path="res://enemies/EnemyMedium.tscn" id="4_1bvp3"]
@@ -16,6 +16,7 @@ script = ExtResource("1_1bvp3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.28696, 0, 4.82073)
 
 [node name="TimerCura" type="Timer" parent="."]
+wait_time = 10.0
 autostart = true
 
 [connection signal="timeout" from="TimerCura" to="." method="_on_timer_cura_timeout"]
