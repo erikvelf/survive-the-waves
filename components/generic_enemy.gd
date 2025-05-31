@@ -1,4 +1,7 @@
 extends CharacterBody3D
 
-func die():
-	print(owner.name, " is dead")
+@onready var hurt_sound: AudioStreamPlayer = $HurtSound
+
+func _on_hurtbox_received_damage(damage: int) -> void:
+	hurt_sound.play()
+	

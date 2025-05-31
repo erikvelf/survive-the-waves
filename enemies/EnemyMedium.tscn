@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_iiqbo"]
 [ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_medium.gd" id="1_xiv3h"]
 [ext_resource type="PackedScene" uid="uid://hvicyqyeyndq" path="res://enemies/models/EnemyMedium.glb" id="2_6ggex"]
-[ext_resource type="AudioStream" uid="uid://cqnpeqly87s45" path="res://enemies/test_enemy/hit.mp3" id="4_q5333"]
+[ext_resource type="AudioStream" uid="uid://bqstk6wywgdp3" path="res://art/sounds/enemy_medium_hurt.mp3" id="3_xiv3h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xiv3h"]
 
@@ -21,7 +21,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.150845, 0, 0)
 shape = SubResource("CapsuleShape3D_xiv3h")
 
 [node name="HurtSound" parent="GenericEnemy" index="2"]
-stream = ExtResource("4_q5333")
+stream = ExtResource("3_xiv3h")
 
 [node name="model" parent="." instance=ExtResource("2_6ggex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dm4bni2rs2ujr"]
+[gd_scene load_steps=11 format=3 uid="uid://dm4bni2rs2ujr"]
 
 [ext_resource type="PackedScene" uid="uid://cnopmgo5xvtod" path="res://player/sahur.tscn" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://dwonmc57t602o" path="res://player/player.gd" id="1_i3pqv"]
 [ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="3_g1dw6"]
 [ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="4_yw30f"]
 [ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="5_qjkh3"]
+[ext_resource type="AudioStream" uid="uid://cqnpeqly87s45" path="res://art/sounds/generic_hurt.mp3" id="6_g6k8r"]
+[ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="7_boad6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_onrkg"]
 margin = 0.795
@@ -69,5 +71,13 @@ metadata/_custom_type_script = "uid://2865ivc26bmt"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_g6k8r")
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_g6k8r")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_boad6")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 
 [editable path="PlayerModel"]
