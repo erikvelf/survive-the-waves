@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwsvomttnrfot"]
+
+[ext_resource type="PackedScene" uid="uid://b0wgxb6cf0tnv" path="res://world/models/pine_tree_low.glb" id="1_qsrh5"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ips0x"]
+height = 8.537
+radius = 1.5415
+
+[node name="SlimTallTree" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00667882, 4.29415, 0)
+shape = SubResource("CylinderShape3D_ips0x")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_qsrh5")]
+transform = Transform3D(3, 0, 0, 0, 5, 0, 0, 0, 3, 0, -4.02873, 0)

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4163mx87qw0"]
+
+[ext_resource type="PackedScene" uid="uid://d2se1aw47oq0x" path="res://world/models/low_poly_tree_concept.glb" id="1_ips0x"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ips0x"]
+height = 6.98395
+radius = 1.98633
+
+[node name="TallTree" type="StaticBody3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ips0x")]
+transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, -11.2133, -0.605859, 3.75444)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34623, 3.50896, 0)
+shape = SubResource("CylinderShape3D_ips0x")
