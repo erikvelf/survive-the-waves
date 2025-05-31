@@ -19,6 +19,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 [node name="EnemyMedium" parent="." instance=ExtResource("4_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.28696, 0, 4.82073)
 
+[node name="EnemyMedium2" parent="." instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.287, 0, 4.82073)
+
 [node name="TimerCura" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
