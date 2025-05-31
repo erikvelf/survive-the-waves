@@ -33,7 +33,8 @@ enabled=PackedStringArray("res://addons/godot-vim/plugin.cfg", "res://addons/mix
 folder_colors={
 "res://components/": "blue",
 "res://enemies/": "orange",
-"res://player/": "green"
+"res://player/": "green",
+"res://world/": "teal"
 }
 
 [importer_defaults]
