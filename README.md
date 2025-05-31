@@ -1,6 +1,20 @@
-# Survival
+# Brainrot Survival
 
-Gioco in Godot 4 in 3D dove tu devi sopravvivere alle ondate di nemici.
+Godot 4 3D game where you are fighting waves of enemies to then defeat the final
+boss. These enemies from the game are based off the Italian Brainrot and this
+game was made as a school project in around 2 weeks.
+
+Brainrot characters:
+
+- Tung Tung Tunb Sahur
+- Chimpanzini Bananini
+- Br Br Patapim
+
+# How to try it out
+
+Clone this repo, then download the [Godot](https://godotengine.org/) game engine
+for your platform. Then open it and import the project by clicking "import"
+button. After importing you should click F5 to launch the game.
 
 ## Giocatore
 
@@ -36,3 +50,9 @@ CharacterBody3D (tipo di nemico)
 | Damage          | 7          | 25          | 45       |
 | Speed           | 6          | 5           | 4        |
 | AttackCoolDown  | 1          | 2           | 4        |
+
+# Credits
+
+Amazing game ready 3D models for EnemySmall, EnemyMedium and EnemyBig are from
+https://sketchfab.com/alex.cgwarrior, without him i would't be able to make this
+game
