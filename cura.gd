@@ -8,7 +8,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	rotate(Vector3.UP, 0.01) # rotate the boost
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
