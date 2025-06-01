@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://e0nxt3apwwgj"]
+
+[ext_resource type="Texture2D" uid="uid://buadpqhu2pcg8" path="res://art/HealthBar.png" id="1_pmym8"]
+[ext_resource type="Script" uid="uid://bcqjmcy8r817u" path="res://components/health_bar.gd" id="2_w6qbv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmym8"]
+atlas = ExtResource("1_pmym8")
+region = Rect2(0, 96, 0, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6qbv"]
+atlas = ExtResource("1_pmym8")
+region = Rect2(0, 0, 0, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ov3o2"]
+atlas = ExtResource("1_pmym8")
+region = Rect2(0, 48, 0, 48)
+
+[node name="TextureProgressBar" type="TextureProgressBar"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -48.0
+offset_right = 120.0
+grow_horizontal = 2
+grow_vertical = 0
+value = 100.0
+texture_under = SubResource("AtlasTexture_pmym8")
+texture_over = SubResource("AtlasTexture_w6qbv")
+texture_progress = SubResource("AtlasTexture_ov3o2")
+script = ExtResource("2_w6qbv")
