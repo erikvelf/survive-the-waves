@@ -10,20 +10,21 @@ const DAMAGE = 40
 @onready var playerModel: Node3D = $PlayerModel
 @onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer # Nodo animazione dentro al PlayerModel
 #@onready var hitbox: Hitbox = $Hitbox
-@onready var hurtbox: Hurtbox = $Hurtbox
+@onready var hitbox: CollisionShape3D = $Hitbox/CollisionShape3D
 
 # Sistema di togliere il hitbox quando non stai menando i mob
-func set_is_hitbox_disabled(value: bool):
-	$Hitbox/CollisionShape3D.set_deferred("disabled", value)
+func set_is_hitbox_disabled(collision_shape: CollisionShape3D, value: bool):
+	collision_shape.set_deferred("disabled", value)
+	
 
 func go_attack():
 	playerAnimation.play("attack", 0.05, 1.2)
-	set_is_hitbox_disabled(false)
+	set_is_hitbox_disabled(hitbox, false)
 
 func go_idle():
 	playerAnimation.play("Armature|Walk", -1) # Animazione default
 	#playerAnimation.play("Armature|Walk", 0.05) # 0.05 sarebbero il passaggio da un animazione all altra in maniera liscia
-	set_is_hitbox_disabled(true)
+	set_is_hitbox_disabled(hitbox, true)
 
 func _ready() -> void:
 	add_to_group("Player")
@@ -41,9 +42,9 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
-	# Handle jump.
 	
+	
+	# Handle jump.
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
@@ -57,7 +58,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		speed = MAX_SPEED
 	
-
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_right", "move_left", "move_back", "move_forward")
@@ -70,3 +70,4 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
+		

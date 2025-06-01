@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3 uid="uid://x6yck25x3gw0"]
+
+[ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_die.gd" id="1_ovoyi"]
+[ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_vlh5m"]
+[ext_resource type="PackedScene" uid="uid://dn753u20tue2v" path="res://enemies/models/EnemyBig.fbx" id="2_ovoyi"]
+[ext_resource type="Texture2D" uid="uid://do8ta3v7qhadx" path="res://enemies/models/EnemyBig_0.png" id="3_omrog"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vlh5m"]
+height = 4.90991
+radius = 1.54688
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ovoyi"]
+height = 5.04712
+radius = 3.36328
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_omrog"]
+height = 4.93726
+radius = 3.18506
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u26m"]
+albedo_texture = ExtResource("3_omrog")
+
+[node name="EnemyBig" type="Node3D"]
+script = ExtResource("1_ovoyi")
+
+[node name="GenericEnemy" parent="." instance=ExtResource("1_vlh5m")]
+
+[node name="Health" parent="GenericEnemy" index="0"]
+max_health = 1000
+
+[node name="CollisionShape" parent="GenericEnemy" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.36487, 0)
+shape = SubResource("CylinderShape3D_vlh5m")
+
+[node name="Hurtbox" parent="GenericEnemy" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+
+[node name="CollisionShape3D" parent="GenericEnemy/Hurtbox" index="0"]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -0.0752984, 3.59906, -1)
+shape = SubResource("CylinderShape3D_ovoyi")
+
+[node name="Hitbox" parent="GenericEnemy" index="4"]
+damage = 50
+
+[node name="CollisionShape3D" parent="GenericEnemy/Hitbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 3.40588, 0)
+shape = SubResource("CylinderShape3D_omrog")
+
+[node name="EnemyBig" parent="GenericEnemy" instance=ExtResource("2_ovoyi")]
+transform = Transform3D(-0.05, 0, -7.54979e-09, 0, 0.05, 0, 7.54979e-09, 0, -0.05, 0, 0, 0)
+
+[node name="Skeleton3D" parent="GenericEnemy/EnemyBig" index="1"]
+bones/0/position = Vector3(0.000271857, 51.343, -0.348614)
+bones/0/rotation = Quaternion(3.80058e-08, 8.32213e-07, -2.52875e-05, 1)
+bones/1/rotation = Quaternion(-0.00759322, -1.02419e-06, 2.52805e-05, 0.999971)
+bones/7/rotation = Quaternion(0.338232, 0.620769, -0.338182, 0.621191)
+bones/8/rotation = Quaternion(0.282803, 0.000276494, -0.000209708, 0.959178)
+bones/9/rotation = Quaternion(-8.47562e-08, 0.467204, 3.72426e-07, 0.88415)
+bones/10/rotation = Quaternion(0.0247944, -0.473833, -0.0370432, 0.879486)
+bones/11/rotation = Quaternion(0.214431, 0.0959892, 0.275337, 0.932199)
+bones/12/rotation = Quaternion(-1.04904e-05, 0.001062, 0.0244269, 0.999701)
+bones/13/rotation = Quaternion(-1.44131e-05, -0.000788612, 0.00362452, 0.999993)
+bones/15/rotation = Quaternion(-0.00448903, 0.00525805, 0.0447805, 0.998973)
+bones/16/rotation = Quaternion(-7.45058e-08, -1.61367e-05, -0.00123222, 0.999999)
+bones/17/rotation = Quaternion(-3.8743e-07, 1.74183e-05, 0.00118192, 0.999999)
+bones/19/rotation = Quaternion(-0.00440766, 0.00333634, 0.0439743, 0.999017)
+bones/20/rotation = Quaternion(1.65775e-07, 2.9106e-06, 0.000614032, 1)
+bones/21/rotation = Quaternion(-6.23986e-08, 1.64592e-07, -2.56598e-05, 1)
+bones/23/rotation = Quaternion(-0.00425371, -9.50284e-05, 0.0440388, 0.999021)
+bones/24/rotation = Quaternion(2.36556e-07, -1.78695e-05, 0.00126418, 0.999999)
+bones/25/rotation = Quaternion(-4.47035e-08, 8.89717e-06, -0.00159946, 0.999999)
+bones/27/rotation = Quaternion(-0.00378158, -0.0104563, 0.0432402, 0.999003)
+bones/28/rotation = Quaternion(-4.79631e-08, 1.06746e-05, 0.000205607, 1)
+bones/29/rotation = Quaternion(-1.19209e-07, -0.000135674, 0.00377987, 0.999993)
+bones/31/rotation = Quaternion(0.342025, -0.615925, 0.334483, 0.62592)
+bones/32/rotation = Quaternion(0.282736, -0.0101782, 0.00612994, 0.959124)
+bones/33/rotation = Quaternion(1.97973e-07, -0.462374, 1.89278e-07, 0.886685)
+bones/34/rotation = Quaternion(0.0328841, 0.480676, 0.0428236, 0.875234)
+bones/35/rotation = Quaternion(0.213485, -0.0940555, -0.272944, 0.933316)
+bones/36/rotation = Quaternion(-0.000156209, -0.0036507, -0.0063018, 0.999973)
+bones/37/rotation = Quaternion(-0.000150591, 0.00430901, -0.0714652, 0.997434)
+bones/39/rotation = Quaternion(-0.00841554, -0.00397846, -0.0544818, 0.998471)
+bones/40/rotation = Quaternion(-3.12924e-07, -2.25659e-05, 0.0018874, 0.999998)
+bones/41/rotation = Quaternion(1.45752e-07, -6.59991e-06, -0.000165612, 1)
+bones/43/rotation = Quaternion(-0.00826245, -0.000963282, -0.0515653, 0.998635)
+bones/44/rotation = Quaternion(-2.19792e-07, -6.6134e-05, -0.0017474, 0.999999)
+bones/45/rotation = Quaternion(-2.49594e-07, 9.25606e-05, -0.00215796, 0.999998)
+bones/47/rotation = Quaternion(-0.00804595, 0.00296144, -0.0516479, 0.998629)
+bones/48/rotation = Quaternion(-3.91155e-07, -5.27263e-05, -0.00210339, 0.999998)
+bones/49/rotation = Quaternion(-3.07336e-07, 4.59202e-05, -0.00127107, 0.999999)
+bones/51/rotation = Quaternion(-0.00723598, 0.0178697, -0.0525577, 0.998432)
+bones/52/rotation = Quaternion(-2.34693e-07, -3.98083e-06, -0.00175048, 0.999999)
+bones/53/rotation = Quaternion(-4.27477e-07, 8.4854e-06, 0.000357837, 1)
+bones/55/rotation = Quaternion(0.0160669, 0.0609818, 0.997713, -0.0243323)
+bones/56/rotation = Quaternion(-0.16578, 0.00935004, -0.0478034, 0.984959)
+bones/57/rotation = Quaternion(0.552145, 0.0339344, 0.0745517, 0.829715)
+bones/60/rotation = Quaternion(-0.0158665, 0.0586563, 0.997856, 0.0243167)
+bones/61/rotation = Quaternion(-0.160537, -0.00920924, 0.0479696, 0.985821)
+bones/62/rotation = Quaternion(0.548307, -0.0338363, -0.0746035, 0.832256)
+
+[node name="Plane_004_Madin_0" parent="GenericEnemy/EnemyBig/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_4u26m")
+
+[editable path="GenericEnemy"]
+[editable path="GenericEnemy/EnemyBig"]
