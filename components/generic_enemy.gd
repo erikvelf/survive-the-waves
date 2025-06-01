@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity") # Default: 9.8 * 3 = 29.4
 @onready var hurt_sound: AudioStreamPlayer = $HurtSound
 @onready var player: CharacterBody3D = get_tree().get_nodes_in_group("Player")[0]
 @onready var reaction: Timer
@@ -16,7 +17,6 @@ func get_player_position():
 
 func _ready() -> void:
 	if has_slow_reaction:
-		print("I have slow reaction")
 		reaction = Timer.new()
 		reaction.autostart = true
 		reaction.connect("timeout", move_to_player)
@@ -24,43 +24,28 @@ func _ready() -> void:
 		add_child(reaction)
 		reaction.start()
 
-
 func move_to_player():
-	player_position = Vector3(player.position.x, position.y, player.position.z)
-	look_at(player_position)  # Rotate around Y-axis (up vector)
-
+	var target_pos = player.global_transform.origin
+	target_pos.y = global_transform.origin.y  # Lock Y position
+	look_at(target_pos, Vector3.UP)
 
 func _on_hurtbox_received_damage(damage: int) -> void:
 	hurt_sound.play()
 
-#func move_and_rotate_to_player():
-	#var player_postition = Vector3(player.position.x, position.y, player.position.z)
-	## Rotate the enemy to face the player
-	#look_at(player_postition)  # Rotate around Y-axis (up vector)
-#
-	## Calculate the forward direction based on the rotation
-	#var forward_direction = -transform.basis.z  # The forward direction is along the negative Z-axis in local space
-#
-	## Set the velocity in the direction the enemy is facing
-	#velocity = forward_direction * speed  # Multiply by speed to get movement velocity
-#
-	## Move the enemy using the calculated velocity
-	#move_and_slide()
+func _physics_process(delta: float) -> void:
+	# Apply gravity
+	if not is_on_floor():
+		velocity.y -= GRAVITY * delta
+	else:
+		velocity.y = 0
 
-#func _rotate_to_player(playerPosition: Vector3):
-	#look_at(playerPosition)
+	# Calculate horizontal movement
+	var forward_direction = -transform.basis.z
+	velocity.x = forward_direction.x * speed
+	velocity.z = forward_direction.z * speed
 
-func _process(_delta: float) -> void:
-	# Rotate the enemy to face the player
-	# look_at(player_position)  # Rotate around Y-axis (up vector)
+	move_and_slide()
+	
+	# If it has slow reaction, the timer will call move_to_player()
 	if not has_slow_reaction:
 		move_to_player()
-
-	# Calculate the forward direction based on the rotation
-	var forward_direction = -transform.basis.z  # The forward direction is along the negative Z-axis in local space
-	## Set the velocity in the direction the enemy is facing
-	velocity = forward_direction * speed  # Multiply by speed to get movement velocity
-#
-	## Move the enemy using the calculated velocity
-	move_and_slide()
-##
