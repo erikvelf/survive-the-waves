@@ -53,6 +53,38 @@ CharacterBody3D (tipo di nemico)
 
 # Credits
 
-Amazing game ready 3D models for EnemySmall, EnemyMedium and EnemyBig are from
+Amazing game ready 3D models for EnemySmall and EnemyBig are from
 https://sketchfab.com/alex.cgwarrior, without him i would't be able to make this
 game
+
+"Tung Sahur Game 3D model NO AI Free Download" (https://skfb.ly/pwQRS) by Alex
+CGW is licensed under Creative Commons Attribution
+(http://creativecommons.org/licenses/by/4.0/).
+
+"Brr Brr Patapim Game Ready 3D model FREE" (https://skfb.ly/pwG8D) by Alex CGW
+is licensed under Creative Commons Attribution
+(http://creativecommons.org/licenses/by/4.0/).
+
+"Udin Din Din Dun Madin Din Din Dun Game Model" (https://skfb.ly/pwNCX) by Alex
+CGW is licensed under Creative Commons Attribution
+(http://creativecommons.org/licenses/by/4.0/).
+
+"Low Poly Stylized Mushroom" (https://skfb.ly/o7VOY) by Natural_Disbuster is
+licensed under Creative Commons Attribution
+(http://creativecommons.org/licenses/by/4.0/).
+
+EnemyMedium was taken from
+https://sketchfab.com/3d-models/chimpanzini-bananini-c9a2c49871b242c7b1a047dad8d9f218
+
+Healthbar.png and LongHealthBar.png from `art/` folder were based off this nice
+progress bar:
+https://forum.godotengine.org/t/how-to-make-health-bar-with-texture-progress-bar/4204/2
+
+# How to create animated models for godot
+
+1. Download any .gbl or .fbx file
+2. Upload the model to mixamo.com for rigging
+3. Download the standard model from Mixamo, with your chosen animation if you
+   want (it has to be ready for animations)
+4. Watch the video for the Mixamo animations plugin located here in this repo in
+   `/addons` from SOME_NAME_OF_THE_AUTHOR_OF_THIS_AMAZING_PLUGIN
