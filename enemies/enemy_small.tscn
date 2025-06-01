@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://drceh860tqjpr"]
 
-[ext_resource type="Script" uid="uid://b13uikn6l0hy6" path="res://enemies/enemy_small.gd" id="1_rrjw4"]
+[ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_die.gd" id="1_rrjw4"]
 [ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_tyddy"]
 [ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="2_rrjw4"]
 [ext_resource type="PackedScene" uid="uid://bvb3xxodveny7" path="res://enemies/models/EnemySmall.glb" id="2_wljif"]
@@ -11,16 +11,17 @@ radius = 0.494141
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lv3pj"]
 height = 1.46939
-radius = 0.828125
+radius = 0.648926
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_aoweh"]
 height = 1.5
-radius = 1.05322
+radius = 0.89209
 
 [node name="EnemySmall" type="Node3D"]
 script = ExtResource("1_rrjw4")
 
 [node name="GenericEnemy" parent="." instance=ExtResource("1_tyddy")]
+has_slow_reaction = true
 speed = 6
 
 [node name="Health" parent="GenericEnemy" index="0"]
@@ -34,7 +35,7 @@ shape = SubResource("CylinderShape3D_rrjw4")
 stream = ExtResource("2_rrjw4")
 
 [node name="CollisionShape3D" parent="GenericEnemy/Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74976, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74976, -0.282211)
 shape = SubResource("CylinderShape3D_lv3pj")
 
 [node name="Hitbox" parent="GenericEnemy" index="4"]
