@@ -10,16 +10,16 @@
 [ext_resource type="PackedScene" uid="uid://jsag7fqf8h30" path="res://enemies/models/WalkingEnemyBig.glb" id="13_fqle2"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vlh5m"]
-height = 4.90991
-radius = 1.54688
+height = 4.45496
+radius = 0.362793
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ovoyi"]
-height = 5.04712
-radius = 2.47607
+height = 4.76178
+radius = 1.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_omrog"]
-height = 4.93726
-radius = 3.11084
+height = 4.46863
+radius = 4.10205
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u26m"]
 albedo_texture = ExtResource("3_omrog")
@@ -419,7 +419,7 @@ speed = 2
 max_health = 4000
 
 [node name="CollisionShape" parent="GenericEnemy" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.36487, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.13739, 0)
 shape = SubResource("CylinderShape3D_vlh5m")
 
 [node name="HurtSound" parent="GenericEnemy" index="2"]
@@ -429,14 +429,14 @@ stream = ExtResource("4_42ptp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
 
 [node name="CollisionShape3D" parent="GenericEnemy/Hurtbox" index="0"]
-transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -0.0752984, 3.59906, -1)
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -0.0752984, 3.45639, -1)
 shape = SubResource("CylinderShape3D_ovoyi")
 
 [node name="Hitbox" parent="GenericEnemy" index="4"]
 damage = 50
 
 [node name="CollisionShape3D" parent="GenericEnemy/Hitbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 3.40588, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.17168, 0)
 shape = SubResource("CylinderShape3D_omrog")
 
 [node name="EnemyBig" parent="GenericEnemy" instance=ExtResource("13_fqle2")]

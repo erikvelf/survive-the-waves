@@ -6,7 +6,7 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity") # Defaul
 @onready var reaction: Timer
 @export var has_slow_reaction: bool = false
 @export var reaction_speed: float = 1
-@export var speed = 2
+@export var speed = 3
 @onready var player_position = Vector3(player.position.x, position.y, player.position.z) : set = set_player_position, get = get_player_position
 @onready var animation = $EnemyBig/AnimationPlayer
 
