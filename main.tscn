@@ -1,35 +1,174 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvb6eriwqjid0"]
+[gd_scene load_steps=13 format=3 uid="uid://dvb6eriwqjid0"]
 
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dm4bni2rs2ujr" path="res://player/player.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://dygsdoqn82deh" path="res://enemies/enemy_medium.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://x6yck25x3gw0" path="res://enemies/enemy_big.tscn" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://drceh860tqjpr" path="res://enemies/enemy_small.tscn" id="4_lquwl"]
 [ext_resource type="PackedScene" uid="uid://e0nxt3apwwgj" path="res://components/health_bar.tscn" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://ca617iqfms1a8" path="res://timer_cura.gd" id="7_kek77"]
+[ext_resource type="PackedScene" uid="uid://d0mf3f3nfbb2p" path="res://cura.tscn" id="8_4c57u"]
+[ext_resource type="Script" uid="uid://cwujp017laqb4" path="res://wave_info.gd" id="8_5vw27"]
 
-[node name="Main" type="Node"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_7mycd"]
+
+[sub_resource type="Curve3D" id="Curve3D_272bh"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0677381, 0, -54.5803, 0, 0, 0, 0, 0, 0, 17.534, 0, -54.4542, 0, 0, 0, 0, 0, 0, 33.4329, 0, -44.1535, 0, 0, 0, 0, 0, 0, 47.3164, 0, -26.2393, 0, 0, 0, 0, 0, 0, 50.2275, 0, -12.1319, 0, 0, 0, 0, 0, 0, 48.884, 0, 4.4387, 0, 0, 0, 0, 0, 0, 45.3011, 0, 23.4726, 0, 0, 0, 0, 0, 0, 35.8961, 0, 39.5953, 0, 0, 0, 0, 0, 0, 20.2212, 0, 47.6567, 0, 0, 0, 0, 0, 0, 2.75485, 0, 49.6721, 0, 0, 0, 0, 0, 0, -19.414, 0, 47.2088, 0, 0, 0, 0, 0, 0, -36.8803, 0, 37.8039, 0, 0, 0, 0, 0, 0, -45.3895, 0, 18.3222, 0, 0, 0, 0, 0, 0, -48.9724, 0, 1.9755, 0, 0, 0, 0, 0, 0, -48.5245, 0, -13.6994, 0, 0, 0, 0, 0, 0, -42.7024, 0, -32.0614, 0, 0, 0, 0, 0, 0, -32.6257, 0, -46.3928, 0, 0, 0, 0, 0, 0, -20.3097, 0, -52.6628, 0, 0, 0, 0, 0, 0, 0.188346, 26.0424, -52.6628),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 19
+
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_path", "spawn_path_follow", "enemies_container", "wave_timer")]
 script = ExtResource("1_1bvp3")
+enemy_small_scene = ExtResource("4_lquwl")
+enemy_medium_scene = ExtResource("4_1bvp3")
+enemy_big_scene = ExtResource("4_272bh")
+spawn_path = NodePath("SpawnLocation")
+spawn_path_follow = NodePath("SpawnLocation/SpawnPath")
+enemies_container = NodePath("EnemiesContainer")
+wave_timer = NodePath("WaveTimer")
+
+[node name="WaveTimer" type="Timer" parent="."]
+wait_time = 5.0
 
 [node name="World" parent="." instance=ExtResource("1_ig7tw")]
 
+[node name="EnemiesContainer" type="Node3D" parent="."]
+
 [node name="Player" parent="." instance=ExtResource("2_0xm2m")]
-
-[node name="EnemySmall" parent="." instance=ExtResource("4_lquwl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
-
-[node name="EnemyMedium" parent="." instance=ExtResource("4_1bvp3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.28696, 0, 4.82073)
-
-[node name="EnemyMedium2" parent="." instance=ExtResource("4_1bvp3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.287, 0, 4.82073)
 
 [node name="TimerCura" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
+script = ExtResource("7_kek77")
+boost = ExtResource("8_4c57u")
 
 [node name="UICanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="TextureProgressBar" parent="UICanvasLayer" node_paths=PackedStringArray("character") instance=ExtResource("6_7mycd")]
 character = NodePath("../../Player")
 
-[connection signal="timeout" from="TimerCura" to="." method="_on_timer_cura_timeout"]
+[node name="WaveInfo" type="Control" parent="UICanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="UICanvasLayer/WaveInfo" node_paths=PackedStringArray("main")]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 26.0
+offset_right = 103.0
+offset_bottom = 49.0
+text = "Wave 1/6"
+script = ExtResource("8_5vw27")
+main = NodePath("../../..")
+
+[node name="EnemyCounter" type="Control" parent="UICanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+
+[node name="Label" type="Label" parent="UICanvasLayer/EnemyCounter"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 23.0
+offset_right = 72.0
+offset_bottom = 46.0
+text = "Enemies left: 10/50"
+
+[node name="PlaceHolders" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -50, 0, 0)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -50, 0, -18)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -42, 0, -39)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -27, 0, -50)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, 0, -54)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-0.517638, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517638, 7.26889, 0, -55.8638)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-0.517638, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517638, 24.6556, 0, -51.205)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-0.517638, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517638, 42.8694, 0, -38.0424)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-0.517638, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517638, 49.6123, 0, -20.7065)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-0.517638, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517638, 49.5938, 0, -5.18234)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-1.99684, 0, -0.112305, 0, 2, 0, 0.112305, 0, -1.99684, 48.658, 0, -6.11593)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-1.99684, 0, -0.112305, 0, 2, 0, 0.112305, 0, -1.99684, 49.6687, 0, 11.8557)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D13" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-1.99684, 0, -0.112305, 0, 2, 0, 0.112305, 0, -1.99684, 42.8605, 0, 33.2717)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D14" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-1.99684, 0, -0.112305, 0, 2, 0, 0.112305, 0, -1.99684, 28.5019, 0, 45.0967)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D15" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(-1.99684, 0, -0.112305, 0, 2, 0, 0.112305, 0, -1.99684, 13.7501, 0, 49.9327)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D16" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(0.408343, 0, 1.95787, 0, 2, 0, -1.95787, 0, 0.408343, -5.38369, 0, 52.8755)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D17" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(0.408343, 0, 1.95787, 0, 2, 0, -1.95787, 0, 0.408343, -23.0045, 0, 49.2004)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D18" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(0.408343, 0, 1.95787, 0, 2, 0, -1.95787, 0, 0.408343, -41.9288, 0, 37.0813)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D19" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(0.408343, 0, 1.95787, 0, 2, 0, -1.95787, 0, 0.408343, -49.6345, 0, 20.1514)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="MeshInstance3D20" type="MeshInstance3D" parent="PlaceHolders"]
+transform = Transform3D(0.408343, 0, 1.95787, 0, 2, 0, -1.95787, 0, 0.408343, -50.4877, 0, 4.65067)
+mesh = SubResource("CylinderMesh_7mycd")
+
+[node name="SpawnLocation" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+curve = SubResource("Curve3D_272bh")
+
+[node name="SpawnPath" type="PathFollow3D" parent="SpawnLocation"]
+transform = Transform3D(-0.00721939, 0, -0.99997, 0, 1, 0, 0.99997, 0, -0.00721939, 0.0677381, 0, -54.5803)
+
+[connection signal="wave_started" from="." to="UICanvasLayer/WaveInfo/Label" method="_on_main_wave_started"]
+[connection signal="timeout" from="TimerCura" to="TimerCura" method="_on_timeout"]

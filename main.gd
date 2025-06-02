@@ -16,13 +16,14 @@ signal wave_cleared(wave_number) # Emitted when all enemies of a wave are defeat
 signal all_waves_completed
 
 # --- WAVE CONFIGURATION ---
-var wave_definitions = [
+@export var wave_definitions = [
+	# {"small": 0, "medium": 0, "big": 1} # for testing the boss
 	{"small": 5, "medium": 0, "big": 0},      # Wave 1
 	{"small": 10, "medium": 2, "big": 0},     # Wave 2
 	{"small": 15, "medium": 5, "big": 0},     # Wave 3
-	{"small": 0, "medium": 10, "big": 0},     # Wave 4
-	{"small": 15, "medium": 5, "big": 0},     # Wave 3
-	{"small": 100, "medium": 50, "big": 0}      # Final finishing wave
+	{"small": 25, "medium": 10, "big": 0},     # Wave 4
+	{"small": 30, "medium": 15, "big": 0},     # Wave 3
+	{"small": 100, "medium": 25, "big": 1}      # Final finishing wave
 ]
 
 # --- STATE VARIABLES ---
@@ -175,6 +176,7 @@ func _on_all_enemies_defeated():
 		# Not the last wave, so start the timer for the delay until the next wave.
 		print("Starting 5-second timer for the next wave...")
 		wave_timer.wait_time = 5.0 # 5-second delay
+		wave_timer.one_shot = true
 		wave_timer.start()
 
 
@@ -188,21 +190,21 @@ func _on_inter_wave_timer_timeout():
 
 
 # --- UTILITY (Optional) ---
-func _input(event):
-	if event.is_action_pressed("ui_accept") and OS.is_debug_build():
-		if game_active and enemies_alive_in_current_wave > 0:
-			# If a wave is active, let's "kill all" for quick testing
-			print("DEBUG: Forcing all enemies in current wave to die.")
-			# This is a bit hacky for demo; proper way would be to call die() on each
-			for enemy in enemies_container.get_children():
-				if enemy.has_method("die"): # Check if it's one of our enemies
-					enemy.call_deferred("die") # Call die safely
-			# _on_all_enemies_defeated() will be called once all 'died' signals are processed
-		elif not game_active and wave_timer.is_stopped() and current_wave_index < wave_definitions.size() -1 :
-			 # If between waves (timer stopped) and not all waves done
-			print("DEBUG: Forcing start of next wave (skipping timer).")
-			_prepare_next_wave()
-		elif not game_active and not wave_timer.is_stopped():
-			print("DEBUG: Inter-wave timer is active. Forcing it to timeout.")
-			wave_timer.stop() # Stop it
-			_on_inter_wave_timer_timeout() # Manually call its timeout logic
+#func _input(event):
+	#if event.is_action_pressed("ui_accept") and OS.is_debug_build():
+		#if game_active and enemies_alive_in_current_wave > 0:
+			## If a wave is active, let's "kill all" for quick testing
+			#print("DEBUG: Forcing all enemies in current wave to die.")
+			## This is a bit hacky for demo; proper way would be to call die() on each
+			#for enemy in enemies_container.get_children():
+				#if enemy.has_method("die"): # Check if it's one of our enemies
+					#enemy.call_deferred("die") # Call die safely
+			## _on_all_enemies_defeated() will be called once all 'died' signals are processed
+		#elif not game_active and wave_timer.is_stopped() and current_wave_index < wave_definitions.size() -1 :
+			 ## If between waves (timer stopped) and not all waves done
+			#print("DEBUG: Forcing start of next wave (skipping timer).")
+			#_prepare_next_wave()
+		#elif not game_active and not wave_timer.is_stopped():
+			#print("DEBUG: Inter-wave timer is active. Forcing it to timeout.")
+			#wave_timer.stop() # Stop it
+			#_on_inter_wave_timer_timeout() # Manually call its timeout logic
