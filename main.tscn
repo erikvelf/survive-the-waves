@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dvb6eriwqjid0"]
+[gd_scene load_steps=14 format=3 uid="uid://dvb6eriwqjid0"]
 
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ca617iqfms1a8" path="res://timer_cura.gd" id="7_kek77"]
 [ext_resource type="PackedScene" uid="uid://d0mf3f3nfbb2p" path="res://cura.tscn" id="8_4c57u"]
 [ext_resource type="Script" uid="uid://cwujp017laqb4" path="res://wave_info.gd" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://c54ojnpjcrri4" path="res://enemy_counter.gd" id="11_efxa6"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_7mycd"]
 
@@ -66,12 +67,14 @@ text = "Wave 1/6"
 script = ExtResource("8_5vw27")
 main = NodePath("../../..")
 
-[node name="EnemyCounter" type="Control" parent="UICanvasLayer"]
+[node name="EnemyCounter" type="Control" parent="UICanvasLayer" node_paths=PackedStringArray("main")]
 layout_mode = 3
 anchors_preset = 0
 offset_top = -20.0
 offset_right = 40.0
 offset_bottom = 20.0
+script = ExtResource("11_efxa6")
+main = NodePath("../..")
 
 [node name="Label" type="Label" parent="UICanvasLayer/EnemyCounter"]
 layout_mode = 0
@@ -170,5 +173,7 @@ curve = SubResource("Curve3D_272bh")
 [node name="SpawnPath" type="PathFollow3D" parent="SpawnLocation"]
 transform = Transform3D(-0.00721939, 0, -0.99997, 0, 1, 0, 0.99997, 0, -0.00721939, 0.0677381, 0, -54.5803)
 
+[connection signal="enemies_remained" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_enemies_remained"]
 [connection signal="wave_started" from="." to="UICanvasLayer/WaveInfo/Label" method="_on_main_wave_started"]
+[connection signal="wave_started" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_wave_started"]
 [connection signal="timeout" from="TimerCura" to="TimerCura" method="_on_timeout"]

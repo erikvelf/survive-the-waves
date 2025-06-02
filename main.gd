@@ -14,6 +14,7 @@ extends Node # Or Node, if you don't need 3D properties directly on Main
 signal wave_started(wave_number) # Emitted when a wave's enemies begin spawning
 signal wave_cleared(wave_number) # Emitted when all enemies of a wave are defeated
 signal all_waves_completed
+signal enemies_remained(count)
 
 # --- WAVE CONFIGURATION ---
 @export var wave_definitions = [
@@ -150,6 +151,7 @@ func _on_enemy_died():
 
 	enemies_alive_in_current_wave -= 1
 	print("Enemy died. Enemies remaining in wave ", current_wave_index + 1, ": ", enemies_alive_in_current_wave)
+	enemies_remained.emit(enemies_alive_in_current_wave)
 
 	if enemies_alive_in_current_wave <= 0:
 		_on_all_enemies_defeated()
