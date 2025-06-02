@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://dr48kapxndkov"]
+
+[ext_resource type="Script" uid="uid://64oelcbwecii" path="res://components/generic_enemy.gd" id="1_wsdo7"]
+[ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="2_tfxh0"]
+[ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="3_edugr"]
+[ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="4_5i7tn"]
+[ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="5_d06w8"]
+[ext_resource type="PackedScene" uid="uid://bvb3xxodveny7" path="res://enemies/models/EnemySmall.glb" id="6_kv1uc"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tg76a"]
+height = 1.36421
+radius = 0.494141
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lrmct"]
+height = 1.46939
+radius = 0.648926
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_46jic"]
+height = 1.5
+radius = 0.89209
+
+[node name="EnemySmall" type="CharacterBody3D"]
+script = ExtResource("1_wsdo7")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_tfxh0")
+max_health = 90
+metadata/_custom_type_script = "uid://d06olc43j4g25"
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.682101, 0)
+shape = SubResource("CylinderShape3D_tg76a")
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_edugr")
+playback_type = 1
+
+[node name="Hurtbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("4_5i7tn")
+metadata/_custom_type_script = "uid://2865ivc26bmt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74976, -0.282211)
+shape = SubResource("CylinderShape3D_lrmct")
+
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_d06w8")
+damage = 10
+metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+shape = SubResource("CylinderShape3D_46jic")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("6_kv1uc")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.5, 0, 1.31134e-07, 0, -1.5, 0, 0, 0)

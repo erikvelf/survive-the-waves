@@ -1,20 +1,22 @@
-[gd_scene load_steps=16 format=3 uid="uid://x6yck25x3gw0"]
+[gd_scene load_steps=18 format=3 uid="uid://x6yck25x3gw0"]
 
-[ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_die.gd" id="1_ovoyi"]
-[ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_vlh5m"]
+[ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="1_16bss"]
+[ext_resource type="PackedScene" uid="uid://cbs4w4fahvpop" path="res://enemies/reworked-enemies/enemy_medium.tscn" id="1_68a0u"]
+[ext_resource type="Script" uid="uid://c40y3l68ari13" path="res://enemies/enemy_big.gd" id="1_u18xm"]
+[ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="3_68a0u"]
 [ext_resource type="Texture2D" uid="uid://do8ta3v7qhadx" path="res://enemies/models/EnemyBig_0.png" id="3_omrog"]
-[ext_resource type="Script" uid="uid://c40y3l68ari13" path="res://components/enemy_big.gd" id="3_tkev6"]
 [ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="4_42ptp"]
+[ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="4_snmr0"]
 [ext_resource type="PackedScene" uid="uid://cr23i6abj62kb" path="res://enemies/models/EnemyBigIdle.glb" id="5_4u26m"]
 [ext_resource type="Animation" uid="uid://du61677f41rc1" path="res://ready-animations/standing_melee_attack_downward.res" id="8_16bss"]
 [ext_resource type="Texture2D" uid="uid://dke5p1dfabdgt" path="res://enemies/models/EnemyBig_3.png" id="8_ont1s"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vlh5m"]
 height = 4.45496
-radius = 0.362793
+radius = 0.867188
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ovoyi"]
-height = 4.76178
+height = 4.38089
 radius = 1.06934
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_omrog"]
@@ -408,55 +410,64 @@ _data = {
 &"standing_melee_attack_downward": ExtResource("8_16bss")
 }
 
-[node name="EnemyBig" type="Node3D"]
-script = ExtResource("1_ovoyi")
+[node name="EnemyBig" type="CharacterBody3D"]
+script = ExtResource("1_u18xm")
+support_enemy = ExtResource("1_68a0u")
 
-[node name="GenericEnemy" parent="." instance=ExtResource("1_vlh5m")]
-script = ExtResource("3_tkev6")
-speed = 2
-
-[node name="Health" parent="GenericEnemy" index="0"]
+[node name="Health" type="Node" parent="."]
+script = ExtResource("1_16bss")
 max_health = 2000
+metadata/_custom_type_script = "uid://d06olc43j4g25"
 
-[node name="CollisionShape" parent="GenericEnemy" index="1"]
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.13739, 0)
 shape = SubResource("CylinderShape3D_vlh5m")
 
-[node name="HurtSound" parent="GenericEnemy" index="2"]
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_42ptp")
+playback_type = 1
 
-[node name="Hurtbox" parent="GenericEnemy" index="3"]
+[node name="Hurtbox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("3_68a0u")
+metadata/_custom_type_script = "uid://2865ivc26bmt"
 
-[node name="CollisionShape3D" parent="GenericEnemy/Hurtbox" index="0"]
-transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -0.0752984, 3.45639, -1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 1.66492e-08, 3.19044, -1)
 shape = SubResource("CylinderShape3D_ovoyi")
 
-[node name="Hitbox" parent="GenericEnemy" index="4"]
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_snmr0")
 damage = 50
+metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
 
-[node name="CollisionShape3D" parent="GenericEnemy/Hitbox" index="0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.17168, 0)
 shape = SubResource("CylinderShape3D_omrog")
 
-[node name="AttackDurationTimer" type="Timer" parent="GenericEnemy"]
+[node name="AttackDurationTimer" type="Timer" parent="."]
 wait_time = 0.8
 one_shot = true
 
-[node name="EnableHitboxTimer" type="Timer" parent="GenericEnemy"]
+[node name="EnableHitboxTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
 
-[node name="PlayerDetector" type="Area3D" parent="GenericEnemy"]
+[node name="PlayerDetector" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GenericEnemy/PlayerDetector"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetector"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 2.40588, 0)
 shape = SubResource("CylinderShape3D_omrog")
 
-[node name="EnemyBig" parent="GenericEnemy" instance=ExtResource("5_4u26m")]
+[node name="Model" parent="." instance=ExtResource("5_4u26m")]
 transform = Transform3D(-5, 0, 4.37114e-07, 0, 5, 0, -4.37114e-07, 0, -5, 0, 0, 0)
 
-[node name="Skeleton" parent="GenericEnemy/EnemyBig/Armature" index="0"]
+[node name="Skeleton" parent="Model/Armature" index="0"]
 bones/0/position = Vector3(-6.18695e-05, 0.450314, -0.00867093)
 bones/0/rotation = Quaternion(-0.00220877, -0.000260056, -0.0111505, 0.999935)
 bones/1/rotation = Quaternion(0.14425, 0.00221099, 0.00519918, 0.989525)
@@ -511,20 +522,21 @@ bones/61/rotation = Quaternion(-0.0060122, 0.9066, -0.421947, -0.00102938)
 bones/62/rotation = Quaternion(0.0501989, 0.620624, -0.782378, 0.0138066)
 bones/63/rotation = Quaternion(-0.0880187, 0.990168, 0.0512889, -0.0958598)
 
-[node name="Plane_004_Madin_0" parent="GenericEnemy/EnemyBig/Armature/Skeleton" index="0"]
+[node name="Plane_004_Madin_0" parent="Model/Armature/Skeleton" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_16bss")
 
-[node name="Plane_004_rb_r_0" parent="GenericEnemy/EnemyBig/Armature/Skeleton" index="1"]
+[node name="Plane_004_rb_r_0" parent="Model/Armature/Skeleton" index="1"]
 surface_material_override/0 = SubResource("StandardMaterial3D_68a0u")
 
-[node name="AnimationPlayer" parent="GenericEnemy/EnemyBig" index="2"]
+[node name="AnimationPlayer" parent="Model" index="2"]
 libraries = {
 &"": SubResource("AnimationLibrary_16bss")
 }
 
-[connection signal="timeout" from="GenericEnemy/AttackDurationTimer" to="GenericEnemy" method="_on_attack_duration_timer_timeout"]
-[connection signal="timeout" from="GenericEnemy/EnableHitboxTimer" to="GenericEnemy" method="_on_enable_hitbox_timer_timeout"]
-[connection signal="body_entered" from="GenericEnemy/PlayerDetector" to="GenericEnemy" method="_on_player_detector_body_entered"]
+[connection signal="health_depleted" from="Health" to="." method="_on_health_health_depleted"]
+[connection signal="received_damage" from="Hurtbox" to="." method="_on_hurtbox_received_damage"]
+[connection signal="timeout" from="AttackDurationTimer" to="." method="_on_attack_duration_timer_timeout"]
+[connection signal="timeout" from="EnableHitboxTimer" to="." method="_on_enable_hitbox_timer_timeout"]
+[connection signal="body_entered" from="PlayerDetector" to="." method="_on_player_detector_body_entered"]
 
-[editable path="GenericEnemy"]
-[editable path="GenericEnemy/EnemyBig"]
+[editable path="Model"]

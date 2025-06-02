@@ -2,7 +2,7 @@ class_name Hurtbox
 extends Area3D
 
 signal received_damage(damage: int)
-@export var health: Health # YOU HAVE TO CONNECT THE Health NODE TO THIS HURTBOX after importing them in your enemy/player scene
+@onready var health: Health = $"../Health"
 
 @onready var disable_hurtbox: Timer = Timer.new() # Timer to disable hurtbox for disable_hurtbox_time seconds
 @export var disable_hurtbox_time: float = 0.5

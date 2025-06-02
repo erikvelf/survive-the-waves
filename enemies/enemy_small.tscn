@@ -1,9 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://drceh860tqjpr"]
+[gd_scene load_steps=8 format=3 uid="uid://mtjcg22g6043"]
 
-[ext_resource type="Script" uid="uid://edydkt6jf5of" path="res://enemies/enemy_die.gd" id="1_rrjw4"]
 [ext_resource type="PackedScene" uid="uid://dxhot3rikgje3" path="res://components/generic_enemy.tscn" id="1_tyddy"]
 [ext_resource type="AudioStream" uid="uid://bkscfbmdkw7di" path="res://art/sounds/player_hit.mp3" id="2_rrjw4"]
 [ext_resource type="PackedScene" uid="uid://bvb3xxodveny7" path="res://enemies/models/EnemySmall.glb" id="2_wljif"]
+
+[sub_resource type="GDScript" id="GDScript_wljif"]
+script/source = "extends Node3D
+
+signal died
+
+@onready var health: Health = $GenericEnemy/Health
+
+func _ready() -> void:
+	health.health_depleted.connect(_on_health_depleted)
+
+func _on_health_depleted():
+	print(\"I am dead\")
+	if not is_queued_for_deletion(): # prevent double signal emmition
+		emit_signal(\"died\")
+		queue_free()
+"
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_rrjw4"]
 height = 1.36421
@@ -18,11 +34,10 @@ height = 1.5
 radius = 0.89209
 
 [node name="EnemySmall" type="Node3D"]
-script = ExtResource("1_rrjw4")
+script = SubResource("GDScript_wljif")
 
 [node name="GenericEnemy" parent="." instance=ExtResource("1_tyddy")]
 has_slow_reaction = true
-speed = 6
 
 [node name="Health" parent="GenericEnemy" index="0"]
 max_health = 90
@@ -47,7 +62,5 @@ shape = SubResource("CylinderShape3D_aoweh")
 
 [node name="Sketchfab_Scene" parent="GenericEnemy" instance=ExtResource("2_wljif")]
 transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.5, 0, 1.31134e-07, 0, -1.5, 0, 0, 0)
-
-[connection signal="health_depeleted" from="GenericEnemy/Health" to="." method="_on_health_health_depeleted"]
 
 [editable path="GenericEnemy"]

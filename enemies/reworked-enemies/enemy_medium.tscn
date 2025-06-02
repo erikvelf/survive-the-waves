@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://cbs4w4fahvpop"]
+
+[ext_resource type="Script" uid="uid://64oelcbwecii" path="res://components/generic_enemy.gd" id="1_f5i0e"]
+[ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="1_ty80j"]
+[ext_resource type="AudioStream" uid="uid://bprv15da6ejkk" path="res://art/sounds/enemy_hit.wav" id="2_f5i0e"]
+[ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="3_7wi6d"]
+[ext_resource type="Script" uid="uid://bpbqlme8xa6lx" path="res://components/hitbox.gd" id="4_gmd42"]
+[ext_resource type="PackedScene" uid="uid://hvicyqyeyndq" path="res://enemies/models/EnemyMedium.glb" id="5_20oh1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_37xip"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujlxf"]
+radius = 0.618429
+height = 2.04562
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rvvc4"]
+radius = 0.698012
+height = 2.26253
+
+[node name="EnemyMedium" type="CharacterBody3D"]
+script = ExtResource("1_f5i0e")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("1_ty80j")
+max_health = 220
+metadata/_custom_type_script = "uid://d06olc43j4g25"
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.150845, 0, 0)
+shape = SubResource("CapsuleShape3D_37xip")
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_f5i0e")
+playback_type = 1
+
+[node name="Hurtbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("3_7wi6d")
+metadata/_custom_type_script = "uid://2865ivc26bmt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.146477, 1, 0)
+shape = SubResource("CapsuleShape3D_ujlxf")
+
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_gmd42")
+metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 1, 0)
+shape = SubResource("CapsuleShape3D_rvvc4")
+
+[node name="model" parent="." instance=ExtResource("5_20oh1")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)

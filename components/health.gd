@@ -3,7 +3,7 @@ extends Node
 
 signal max_health_changed(diff: int)
 signal health_changed(diff: int)
-signal health_depeleted
+signal health_depleted
 
 @export var max_health: int = 100 : set = set_max_health, get = get_max_health
 @export var immortality: bool = false
@@ -64,7 +64,7 @@ func set_health(value: int):
 		health_changed.emit(diff)
 		
 	if health == 0:
-		health_depeleted.emit()
+		health_depleted.emit()
 
 func get_health():
 	return health
