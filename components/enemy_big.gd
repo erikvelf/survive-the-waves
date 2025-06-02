@@ -25,6 +25,7 @@ func set_is_hitbox_disabled(collision_shape: CollisionShape3D, value: bool):
 	collision_shape.set_deferred("disabled", value)
 
 func _ready() -> void:
+	add_to_group("Boss")
 	set_is_hitbox_disabled(hitbox, true)
 	if has_slow_reaction:
 		reaction = Timer.new()
@@ -41,6 +42,7 @@ func move_to_player():
 
 func _on_hurtbox_received_damage(damage: int) -> void:
 	hurt_sound.play()
+	print("Boss health: ", $Health.health)
 
 func _physics_process(delta: float) -> void:
 	# Apply gravity
@@ -50,7 +52,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0
 		
 	if not is_attacking:
-		animation.play("Armature|mixamo_com|Layer0")
+		animation.play("idle")
 		# Calculate horizontal movement
 		var forward_direction = -transform.basis.z
 		velocity.x = forward_direction.x * speed
@@ -58,9 +60,9 @@ func _physics_process(delta: float) -> void:
 
 		move_and_slide()
 	
-		# If it has slow reaction, the timer will call move_to_player()
-		if not has_slow_reaction:
-			move_to_player()
+	# If it has slow reaction, the timer will call move_to_player()
+	if not has_slow_reaction:
+		move_to_player()
 
 
 func _on_player_detector_body_entered(body: Node3D) -> void:
