@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0mf3f3nfbb2p"]
+[gd_scene load_steps=5 format=3 uid="uid://d0mf3f3nfbb2p"]
 
 [ext_resource type="Script" uid="uid://bck06lvge3rka" path="res://cura.gd" id="1_bhsn3"]
 [ext_resource type="PackedScene" uid="uid://dql80rh0hhyq1" path="res://world/models/low_poly_stylized_mushroom.glb" id="2_bhsn3"]
+[ext_resource type="AudioStream" uid="uid://07ryxngqvfkb" path="res://art/eminyildirim_heal-short.mp3" id="3_ypaq5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bhsn3"]
 radius = 0.786447
@@ -14,7 +15,10 @@ script = ExtResource("1_bhsn3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_bhsn3")
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("2_bhsn3")]
+[node name="Model" parent="." instance=ExtResource("2_bhsn3")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.29339, 0)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ypaq5")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
