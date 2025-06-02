@@ -8,7 +8,7 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity") # Defaul
 @export var reaction_speed: float = 1
 @export var speed = 6.5
 
-@export var support_enemy: PackedScene
+
 @onready var player_position = Vector3(player.position.x, position.y, player.position.z) : set = set_player_position, get = get_player_position
 @onready var animation = $Model/AnimationPlayer
 
@@ -27,39 +27,6 @@ func get_player_position():
 func set_is_hitbox_disabled(collision_shape: CollisionShape3D, value: bool):
 	collision_shape.set_deferred("disabled", value)
 
-#func summon_support_enemy_at_relative_position(x: float, y: float, z: float):
-	#var enemy = support_enemy.instantiate()
-	#
-	## Add to the global EnemiesContainer node (as a sibling)
-	#get_tree().get_current_scene().get_node("EnemiesContainer").add_child(enemy)
-	#
-	## Get root enemy node (Node3D) and set support enemy position relative to it
-	#var root_enemy = get_parent()  # CharacterBody3D → Node3D
-	#enemy.global_position = root_enemy.global_position + Vector3(x, y, z)
-#
-	#enemy.add_to_group("SupportEnemy")
-	#print("Support spawned at:", enemy.global_position)
-
-func summon_support_enemy_at_relative_position(x: float, y: float, z: float):
-	var enemy = support_enemy.instantiate()
-
-	var enemies_container = get_tree().get_current_scene()
-	print(enemies_container)
-
-	var offset = Vector3(x, y, z)
-	#var spawn_position = root_node.global_position + offset
-	var spawn_position = position
-	
-	print("Offset: ", offset)
-	print("Spawn position: ", spawn_position)
-
-	enemy.set_deferred("global_position", spawn_position)
-	
-	enemy.add_to_group("SupportEnemy")
-	enemies_container.add_child(enemy)
-	print("Support spawned at:", enemy.global_position)
-
-
 func _ready() -> void:
 	print("Adding support enemy")
 
@@ -74,7 +41,6 @@ func move_to_player():
 func _on_hurtbox_received_damage(damage: int) -> void:
 	hurt_sound.play()
 	print("Boss health: ", $Health.health)
-	summon_support_enemy_at_relative_position(5, 5, 5)
 
 
 func _physics_process(delta: float) -> void:

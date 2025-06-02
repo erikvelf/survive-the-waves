@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://x6yck25x3gw0"]
+[gd_scene load_steps=17 format=3 uid="uid://x6yck25x3gw0"]
 
 [ext_resource type="Script" uid="uid://d06olc43j4g25" path="res://components/health.gd" id="1_16bss"]
-[ext_resource type="PackedScene" uid="uid://cbs4w4fahvpop" path="res://enemies/reworked-enemies/enemy_medium.tscn" id="1_68a0u"]
 [ext_resource type="Script" uid="uid://c40y3l68ari13" path="res://enemies/enemy_big.gd" id="1_u18xm"]
 [ext_resource type="Script" uid="uid://2865ivc26bmt" path="res://components/hurtbox.gd" id="3_68a0u"]
 [ext_resource type="Texture2D" uid="uid://do8ta3v7qhadx" path="res://enemies/models/EnemyBig_0.png" id="3_omrog"]
@@ -23,10 +22,10 @@ radius = 1.06934
 height = 4.46863
 radius = 4.10205
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16bss"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u18xm"]
 albedo_texture = ExtResource("3_omrog")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_68a0u"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5244f"]
 albedo_texture = ExtResource("8_ont1s")
 
 [sub_resource type="Animation" id="Animation_42ptp"]
@@ -412,7 +411,6 @@ _data = {
 
 [node name="EnemyBig" type="CharacterBody3D"]
 script = ExtResource("1_u18xm")
-support_enemy = ExtResource("1_68a0u")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("1_16bss")
@@ -523,10 +521,10 @@ bones/62/rotation = Quaternion(0.0501989, 0.620624, -0.782378, 0.0138066)
 bones/63/rotation = Quaternion(-0.0880187, 0.990168, 0.0512889, -0.0958598)
 
 [node name="Plane_004_Madin_0" parent="Model/Armature/Skeleton" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_16bss")
+surface_material_override/0 = SubResource("StandardMaterial3D_u18xm")
 
 [node name="Plane_004_rb_r_0" parent="Model/Armature/Skeleton" index="1"]
-surface_material_override/0 = SubResource("StandardMaterial3D_68a0u")
+surface_material_override/0 = SubResource("StandardMaterial3D_5244f")
 
 [node name="AnimationPlayer" parent="Model" index="2"]
 libraries = {
