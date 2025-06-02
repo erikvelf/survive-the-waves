@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dm4bni2rs2ujr" path="res://player/player.tscn" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://dygsdoqn82deh" path="res://enemies/enemy_medium.tscn" id="4_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://x6yck25x3gw0" path="res://enemies/enemy_big.tscn" id="4_272bh"]
-[ext_resource type="PackedScene" uid="uid://drceh860tqjpr" path="res://enemies/enemy_small.tscn" id="4_lquwl"]
+[ext_resource type="PackedScene" uid="uid://dr48kapxndkov" path="res://enemies/reworked-enemies/enemy_small.tscn" id="2_efxa6"]
+[ext_resource type="PackedScene" uid="uid://cbs4w4fahvpop" path="res://enemies/reworked-enemies/enemy_medium.tscn" id="3_efxa6"]
+[ext_resource type="PackedScene" uid="uid://x6yck25x3gw0" path="res://enemies/reworked-enemies/enemy_big.tscn" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://e0nxt3apwwgj" path="res://components/health_bar.tscn" id="6_7mycd"]
 [ext_resource type="Script" uid="uid://ca617iqfms1a8" path="res://timer_cura.gd" id="7_kek77"]
 [ext_resource type="PackedScene" uid="uid://d0mf3f3nfbb2p" path="res://cura.tscn" id="8_4c57u"]
@@ -23,8 +23,8 @@ point_count = 19
 
 [node name="Main" type="Node" node_paths=PackedStringArray("spawn_path", "spawn_path_follow", "enemies_container", "wave_timer")]
 script = ExtResource("1_1bvp3")
-enemy_small_scene = ExtResource("4_lquwl")
-enemy_medium_scene = ExtResource("4_1bvp3")
+enemy_small_scene = ExtResource("2_efxa6")
+enemy_medium_scene = ExtResource("3_efxa6")
 enemy_big_scene = ExtResource("4_272bh")
 spawn_path = NodePath("SpawnLocation")
 spawn_path_follow = NodePath("SpawnLocation/SpawnPath")
