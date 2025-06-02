@@ -3,7 +3,7 @@ extends CharacterBody3D
 const MAX_SPEED: float = 7.0
 const MIN_SPEED: float = 5.0
 var speed: float = 7.0
-const JUMP_VELOCITY = 4.5
+const JUMP_VELOCITY = 5 # 4.5
 const DAMAGE = 40
 @onready var pivot = $Pivot # Gira la camera dentro il giocatore
 @export var sensibility = 0.1
