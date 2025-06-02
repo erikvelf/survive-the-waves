@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bvb3xxodveny7" path="res://enemies/models/EnemySmall.glb" id="2_wljif"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_rrjw4"]
-height = 1.49686
+height = 1.36421
 radius = 0.494141
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lv3pj"]
@@ -28,7 +28,7 @@ speed = 6
 max_health = 90
 
 [node name="CollisionShape" parent="GenericEnemy" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.748428, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.682101, 0)
 shape = SubResource("CylinderShape3D_rrjw4")
 
 [node name="HurtSound" parent="GenericEnemy" index="2"]
