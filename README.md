@@ -80,6 +80,9 @@ Healthbar.png and LongHealthBar.png from `art/` folder were based off this nice
 progress bar:
 https://forum.godotengine.org/t/how-to-make-health-bar-with-texture-progress-bar/4204/2
 
+Healing sound from EminYILDIRIM:
+https://freesound.org/people/EminYILDIRIM/sounds/587603/
+
 # How to create animated models for godot
 
 1. Download any .gbl or .fbx file
