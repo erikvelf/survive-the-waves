@@ -463,7 +463,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130297, 2.40588, 0)
 shape = SubResource("CylinderShape3D_omrog")
 
 [node name="Model" parent="." instance=ExtResource("5_4u26m")]
-transform = Transform3D(-5, 0, 4.37114e-07, 0, 5, 0, -4.37114e-07, 0, -5, 0, 0, 0)
+transform = Transform3D(5, 0, -1.13687e-13, 0, 5, 0, 1.13687e-13, 0, 5, 0, 0, 0)
 
 [node name="Skeleton" parent="Model/Armature" index="0"]
 bones/0/position = Vector3(-6.18695e-05, 0.450314, -0.00867093)

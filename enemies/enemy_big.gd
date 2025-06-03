@@ -2,84 +2,214 @@ extends CharacterBody3D
 
 signal died
 
-var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity") # Default: 9.8 * 3 = 29.4
+# ============================================================================
+# CONSTANTS AND CONFIGURATION
+# ============================================================================
+var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+@export_group("Movement")
+@export var movement_speed: float = 6.5
+@export var rotation_speed: float = 1.0
+
+@export_group("Combat")
+@export var attack_windup_time: float = 0.8
+@export var attack_active_time: float = 0.1
+
+# ============================================================================
+# NODE REFERENCES - Cached for performance
+# ============================================================================
 @onready var hurt_sound: AudioStreamPlayer = $HurtSound
-@onready var player: CharacterBody3D = get_tree().get_nodes_in_group("Player")[0]
-@export var reaction_speed: float = 1
-@export var speed = 6.5
-
-
-@onready var player_position = Vector3(player.position.x, position.y, player.position.z) : set = set_player_position, get = get_player_position
-@onready var animation = $Model/AnimationPlayer
-
-
-@onready var player_detector = $PlayerDetector
-
+@onready var animation_player: AnimationPlayer = $Model/AnimationPlayer
+@onready var player_detector: Area3D = $PlayerDetector
 @onready var hitbox: CollisionShape3D = $Hitbox/CollisionShape3D
-var is_attacking = false
+@onready var attack_duration_timer: Timer = $AttackDurationTimer
+@onready var enable_hitbox_timer: Timer = $EnableHitboxTimer
+@onready var health_component = $Health
 
-func set_player_position(new_player_position: Vector3):
-	player_position = new_player_position
+# ============================================================================
+# STATE MANAGEMENT
+# ============================================================================
+enum EnemyState {
+	MOVING_TO_PLAYER,      # Moving toward player
+	ATTACKING    # Currently in attack sequence
+}
 
-func get_player_position():
-	return player_position
+var current_state: EnemyState = EnemyState.MOVING_TO_PLAYER
+var player: CharacterBody3D
+var player_found: bool = false
 
-func set_is_hitbox_disabled(collision_shape: CollisionShape3D, value: bool):
-	collision_shape.set_deferred("disabled", value)
+# ============================================================================
+# PHYSICS VARIABLES
+# ============================================================================
+var target_velocity: Vector3 = Vector3.ZERO
+var target_rotation: float = 0.0
 
+# ============================================================================
+# INITIALIZATION
+# ============================================================================
 func _ready() -> void:
-	print("Adding support enemy")
+	"""Initialize enemy systems and validate setup"""
+	_initialize_enemy()
+	_find_and_cache_player()
+	_validate_required_components()
+	_setup_initial_state()
 
+func _initialize_enemy() -> void:
 	add_to_group("Boss")
-	set_is_hitbox_disabled(hitbox, true)
+	_set_hitbox_enabled(false)
 
-func move_to_player():
-	var target_pos = player.global_transform.origin
-	target_pos.y = global_transform.origin.y  # Lock Y position
-	look_at(target_pos, Vector3.UP)
+func _find_and_cache_player() -> void:
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.size() > 0:
+		player = players[0] as CharacterBody3D
+		if player != null:
+			player_found = true
+		else:
+			push_error("Enemy: Found player node but it's not a CharacterBody3D")
+	else:
+		push_error("Enemy: No player found in 'Player' group")
 
-func _on_hurtbox_received_damage(damage: int) -> void:
-	hurt_sound.play()
-	print("Boss health: ", $Health.health)
+func _validate_required_components() -> void:
+	var required_nodes = [
+		"HurtSound", "Model/AnimationPlayer", "PlayerDetector",
+		"Hitbox/CollisionShape3D", "AttackDurationTimer", 
+		"EnableHitboxTimer", "Health"
+	]
+	
+	for node_path in required_nodes:
+		if not has_node(node_path):
+			push_error("Enemy: Missing required node - " + node_path)
 
+func _setup_initial_state() -> void:
+	"""Configure initial enemy state"""
+	current_state = EnemyState.MOVING_TO_PLAYER
+	target_velocity = Vector3.ZERO
 
+# ============================================================================
+# PHYSICS PROCESSING - Pure physics execution
+# ============================================================================
 func _physics_process(delta: float) -> void:
-	# Apply gravity
+	"""Handle physics simulation - movement and gravity only"""
+	_apply_gravity(delta)
+	_execute_movement()
+	_execute_rotation(delta)
+	
+	# Animation must loop continuously as required
+	if current_state != EnemyState.ATTACKING:
+		animation_player.play("idle", 0.5, 2.0)
+
+func _apply_gravity(delta: float) -> void:
+	"""Apply gravity when not grounded"""
 	if not is_on_floor():
 		velocity.y -= GRAVITY * delta
 	else:
 		velocity.y = 0
+
+func _execute_movement() -> void:
+	"""Execute the movement calculated by AI systems"""
+	velocity.x = target_velocity.x
+	velocity.z = target_velocity.z
+	move_and_slide()
+
+func _execute_rotation(delta: float) -> void:
+	"""Instantly rotate toward player without smoothing"""
+	if player_found and player:
+		var target_position = player.global_position
+		target_position.y = global_position.y  # Lock Y to prevent tilting
 		
-	if not is_attacking:
-		animation.play("idle", 0.5, 2)
-		# Calculate horizontal movement
-		var forward_direction = -transform.basis.z
-		velocity.x = forward_direction.x * speed
-		velocity.z = forward_direction.z * speed
+		# Calculate direction to player
+		var direction_to_player = (target_position - global_position).normalized()
+		if direction_to_player.length() > 0.1:  # Avoid jitter when very close
+			# Apply instant rotation - no smoothing, always face player immediately
+			rotation.y = atan2(direction_to_player.x, direction_to_player.z)
 
-		move_and_slide()
-		move_to_player()
+# ============================================================================
+# AI PROCESSING - Decision making and state management
+# ============================================================================
+func _process(delta: float) -> void:
+	_update_ai_state()
 
+func _update_ai_state() -> void:
+	"""Process current AI state and determine actions"""
+	match current_state:
+		EnemyState.MOVING_TO_PLAYER:
+			_handle_patrol_state()
+		EnemyState.ATTACKING:
+			_handle_attacking_state()
 
+func _handle_patrol_state() -> void:
+	"""AI logic for patrol/movement state"""
+	if not player_found or not player:
+		target_velocity = Vector3.ZERO
+		return
+	
+	# Calculate movement toward player
+	var direction_to_player = (player.global_position - global_position).normalized()
+	direction_to_player.y = 0  # No vertical movement
+	
+	target_velocity = direction_to_player * movement_speed
+
+func _handle_attacking_state() -> void:
+	"""AI logic during attack sequence"""
+	# Remain stationary during attack
+	target_velocity = Vector3.ZERO
+	# Continue facing player through rotation system
+
+# ============================================================================
+# COMBAT SYSTEM - Attack sequence management
+# ============================================================================
+func _start_attack_sequence() -> void:
+	"""Begin the attack sequence"""
+	current_state = EnemyState.ATTACKING
+	target_velocity = Vector3.ZERO
+	
+	# Play attack animation
+	animation_player.play("standing_melee_attack_downward", 0.5, 1.0)
+	
+	# Start attack timing
+	attack_duration_timer.wait_time = attack_windup_time
+	attack_duration_timer.start()
+
+func _complete_attack_sequence() -> void:
+	"""Return to moving state after attack to resume chasing player"""
+	current_state = EnemyState.MOVING_TO_PLAYER
+	_set_hitbox_enabled(false)
+	player_detector.monitoring = true
+
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
+func _set_hitbox_enabled(enabled: bool) -> void:
+	"""Safely enable/disable the attack hitbox"""
+	if hitbox:
+		hitbox.set_deferred("disabled", not enabled)
+
+# ============================================================================
+# SIGNAL HANDLERS - Event responses
+# ============================================================================
 func _on_player_detector_body_entered(body: Node3D) -> void:
-	# Since the player wehn hitting, its hitbox renders and we dont want it to trigger our enemy
-	if body.is_in_group("Player") and body is not Hitbox:
-		is_attacking = true
-		animation.play("standing_melee_attack_downward", 0.5, 1.0)
-		$AttackDurationTimer.start()
+	"""Handle player entering detection range"""
+	if body.is_in_group("Player") and not (body is Hitbox):
+		_start_attack_sequence()
 
 func _on_attack_duration_timer_timeout() -> void:
+	"""Handle attack windup completion - enable hitbox"""
 	player_detector.monitoring = false
-	$EnableHitboxTimer.start()
-	set_is_hitbox_disabled(hitbox, false)
-
+	_set_hitbox_enabled(true)
+	
+	# Start timer for how long hitbox stays active
+	enable_hitbox_timer.wait_time = attack_active_time
+	enable_hitbox_timer.start()
 
 func _on_enable_hitbox_timer_timeout() -> void:
-	player_detector.monitoring = true
-	is_attacking = false
-	set_is_hitbox_disabled(hitbox, true)
+	"""Handle end of attack - disable hitbox and return to detected state"""
+	_complete_attack_sequence()
 
+func _on_hurtbox_received_damage(damage: int) -> void:
+	"""Handle taking damage from player"""
+	hurt_sound.play()
 
 func _on_health_health_depleted() -> void:
+	"""Handle enemy death"""
 	died.emit()
 	queue_free()
