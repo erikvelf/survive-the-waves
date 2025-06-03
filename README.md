@@ -83,6 +83,9 @@ https://forum.godotengine.org/t/how-to-make-health-bar-with-texture-progress-bar
 Healing sound from EminYILDIRIM:
 https://freesound.org/people/EminYILDIRIM/sounds/587603/
 
+Enemy hit sound: Enemy_Hit.wav by D001447733 -- https://freesound.org/s/464623/
+-- License: Attribution 3.0
+
 # How to create animated models for godot
 
 1. Download any .gbl or .fbx file
