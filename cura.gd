@@ -13,7 +13,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		
 		audio_player.play()
 		audio_player.connect("finished", Callable(self, "_on_sound_finished"))  # Wait for sound to finish
-		$Area3D.monitoring = false  # Prevent double healing
+		$Area3D.set_deferred("monitoring", false)  # Prevent double healing
 		$Model.hide()
 
 func _on_sound_finished():
