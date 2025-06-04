@@ -21,6 +21,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 2
 @export var speed: float = 4.0  # Movement speed in units per second
 @export var has_slow_reaction: bool = false  # Whether enemy uses timer-based reactions
 @export var reaction_speed: float = 1.0  # Time between reactions for slow enemies (in seconds)
+@export var damage: int
 
 # Component references - cached for performance and null checking
 @onready var hurt_sound: AudioStreamPlayer = $HurtSound
@@ -33,6 +34,7 @@ var player: CharacterBody3D  # Reference to player for movement targeting
 var movement_target: Vector3  # Current target position for enemy movement
 
 func _ready() -> void:
+	$Hitbox.damage = damage
 	# Initialize all systems in logical order
 	_initialize_components()
 	_setup_player_reference()
