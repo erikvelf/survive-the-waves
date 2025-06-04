@@ -23,8 +23,10 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var animation_player: AnimationPlayer = $Model/AnimationPlayer
 @onready var player_detector: Area3D = $PlayerDetector
 @onready var hitbox: CollisionShape3D = $Hitbox/CollisionShape3D
+@onready var hurtbox: CollisionShape3D = $Hurtbox/CollisionShape3D
 @onready var attack_duration_timer: Timer = $AttackDurationTimer
 @onready var enable_hitbox_timer: Timer = $EnableHitboxTimer
+@onready var despawn_timer: Timer = $DespawnTimer
 @onready var health_component = $Health
 
 # ============================================================================
@@ -32,7 +34,8 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
 # ============================================================================
 enum EnemyState {
 	MOVING_TO_PLAYER,      # Moving toward player
-	ATTACKING    # Currently in attack sequence
+	ATTACKING,    # Currently in attack sequence
+	DEAD          # Enemy is dead - all processes disabled
 }
 
 var current_state: EnemyState = EnemyState.MOVING_TO_PLAYER
@@ -74,7 +77,8 @@ func _validate_required_components() -> void:
 	var required_nodes = [
 		"HurtSound", "Model/AnimationPlayer", "PlayerDetector",
 		"Hitbox/CollisionShape3D", "AttackDurationTimer", 
-		"EnableHitboxTimer", "Health"
+		"EnableHitboxTimer", "DespawnTimer", "Health",
+		"Hurtbox/CollisionShape3D"
 	]
 	
 	for node_path in required_nodes:
@@ -92,6 +96,11 @@ func _setup_initial_state() -> void:
 func _physics_process(delta: float) -> void:
 	"""Handle physics simulation - movement and gravity only"""
 	_apply_gravity(delta)
+	
+	# Skip all processing if dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	_execute_movement()
 	_execute_rotation(delta)
 	
@@ -128,6 +137,10 @@ func _execute_rotation(delta: float) -> void:
 # AI PROCESSING - Decision making and state management
 # ============================================================================
 func _process(delta: float) -> void:
+	# Skip AI processing if dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	_update_ai_state()
 
 func _update_ai_state() -> void:
@@ -137,6 +150,8 @@ func _update_ai_state() -> void:
 			_handle_patrol_state()
 		EnemyState.ATTACKING:
 			_handle_attacking_state()
+		EnemyState.DEAD:
+			_handle_dead_state()
 
 func _handle_patrol_state() -> void:
 	"""AI logic for patrol/movement state"""
@@ -155,6 +170,57 @@ func _handle_attacking_state() -> void:
 	# Remain stationary during attack
 	target_velocity = Vector3.ZERO
 	# Continue facing player through rotation system
+
+func _handle_dead_state() -> void:
+	"""AI logic for dead state - no processing needed"""
+	# All systems disabled, no AI processing required
+	pass
+
+func _enter_dead_state() -> void:
+	"""Disable all enemy systems and enter dead state"""
+	# Set state to dead to stop all AI processing
+	current_state = EnemyState.DEAD
+	
+	# Stop all movement immediately
+	target_velocity = Vector3.ZERO
+	velocity = Vector3.ZERO
+	
+	# Disable combat systems
+	_set_hitbox_enabled(false)
+	_set_hurtbox_enabled(false)
+	player_detector.monitoring = false
+	
+	# Disconnect hurtbox from damage processing to prevent taking damage when dead
+	var hurtbox_node = $Hurtbox
+	if hurtbox_node and hurtbox_node.has_signal("area_entered"):
+		if hurtbox_node.is_connected("area_entered", hurtbox_node._on_area_entered):
+			hurtbox_node.area_entered.disconnect(hurtbox_node._on_area_entered)
+	
+	# Stop all timers to prevent any delayed actions
+	if attack_duration_timer.is_connected("timeout", _on_attack_duration_timer_timeout):
+		attack_duration_timer.timeout.disconnect(_on_attack_duration_timer_timeout)
+	if enable_hitbox_timer.is_connected("timeout", _on_enable_hitbox_timer_timeout):
+		enable_hitbox_timer.timeout.disconnect(_on_enable_hitbox_timer_timeout)
+	
+	attack_duration_timer.stop()
+	enable_hitbox_timer.stop()
+	
+	# Disable player detection to prevent new attacks
+	if player_detector.is_connected("body_entered", _on_player_detector_body_entered):
+		player_detector.body_entered.disconnect(_on_player_detector_body_entered)
+	
+	# Stop animations
+	if animation_player:
+		animation_player.stop()
+	
+	# Clear player reference to prevent any remaining interactions
+	player_found = false
+	player = null
+	
+	# Start despawn timer to remove enemy after death animation
+	despawn_timer.wait_time = 4.9
+	despawn_timer.one_shot = true
+	despawn_timer.start()
 
 # ============================================================================
 # COMBAT SYSTEM - Attack sequence management
@@ -184,17 +250,29 @@ func _set_hitbox_enabled(enabled: bool) -> void:
 	"""Safely enable/disable the attack hitbox"""
 	if hitbox:
 		hitbox.set_deferred("disabled", not enabled)
-
+		
+func _set_hurtbox_enabled(enabled: bool) -> void:
+	"""Safely enable/disable the attack hitbox"""
+	if hurtbox:
+		hurtbox.set_deferred("disabled", not enabled)
 # ============================================================================
 # SIGNAL HANDLERS - Event responses
 # ============================================================================
 func _on_player_detector_body_entered(body: Node3D) -> void:
 	"""Handle player entering detection range"""
+	# Ignore all input when dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	if body.is_in_group("Player") and not (body is Hitbox):
 		_start_attack_sequence()
 
 func _on_attack_duration_timer_timeout() -> void:
 	"""Handle attack windup completion - enable hitbox"""
+	# Ignore timer events when dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	player_detector.monitoring = false
 	_set_hitbox_enabled(true)
 	
@@ -204,14 +282,32 @@ func _on_attack_duration_timer_timeout() -> void:
 
 func _on_enable_hitbox_timer_timeout() -> void:
 	"""Handle end of attack - disable hitbox and return to detected state"""
+	# Ignore timer events when dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	_complete_attack_sequence()
 
 func _on_hurtbox_received_damage(damage: int) -> void:
 	"""Handle taking damage from player"""
+	# Ignore damage when already dead
+	if current_state == EnemyState.DEAD:
+		return
+		
 	hurt_sound.play()
 
 func _on_health_health_depleted() -> void:
 	"""Handle enemy death"""
+	# Enter dead state to disable all systems
+	_enter_dead_state()
+	
+	# Emit death signals
 	died.emit()
 	boss_died.emit()
+	animation_player.play("death")
+	# Remove enemy from scene
+	#queue_free()
+
+func _on_despawn_timer_timeout() -> void:
+	"""Handle despawn timer completion - remove enemy from scene"""
 	queue_free()
