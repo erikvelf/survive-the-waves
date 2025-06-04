@@ -66,11 +66,10 @@ metadata/_custom_type_script = "uid://bpbqlme8xa6lx"
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.00311279, 0, 0.256778)
 shape = SubResource("CylinderShape3D_boad6")
 
-[node name="Hurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+[node name="Hurtbox" type="Area3D" parent="."]
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("5_qjkh3")
-health = NodePath("../Health")
 metadata/_custom_type_script = "uid://2865ivc26bmt"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]

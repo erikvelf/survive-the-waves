@@ -4,7 +4,7 @@ const MAX_SPEED: float = 7.0
 const MIN_SPEED: float = 5.0
 var speed: float = 7.0
 const JUMP_VELOCITY = 5 # 4.5
-const DAMAGE = 40
+@export var damage: int
 @onready var pivot = $Pivot # Gira la camera dentro il giocatore
 @export var sensibility = 0.1
 @onready var playerModel: Node3D = $PlayerModel
@@ -27,6 +27,7 @@ func go_idle():
 	set_is_hitbox_disabled(hitbox, true)
 
 func _ready() -> void:
+	$Hitbox.damage = damage
 	add_to_group("Player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED # Nascondi cursore per giocare
 
