@@ -22,11 +22,12 @@ signal boss_spawned
 	# {"small": 0, "medium": 0, "big": 1} # for testing the boss
 	#{"small": 5, "medium": 5, "big": 1} # for testing the boss
 	{"small": 5, "medium": 0, "big": 0},      # Wave 1
-	#{"small": 10, "medium": 2, "big": 0},     # Wave 2
-	#{"small": 15, "medium": 5, "big": 0},     # Wave 3
-	#{"small": 25, "medium": 10, "big": 0},     # Wave 4
-	#{"small": 30, "medium": 15, "big": 0},     # Wave 3
+	{"small": 10, "medium": 3, "big": 0},     # Wave 2
+	{"small": 15, "medium": 5, "big": 0},     # Wave 3
+	{"small": 30, "medium": 15, "big": 0},     # Wave 4
 	{"small": 100, "medium": 25, "big": 1}      # Final finishing wave
+	# "small": 0, "medium": 0, "big": 1},     
+	# {"small": 0, "medium": 0, "big": 2}   
 ]
 
 # --- STATE VARIABLES ---
