@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 signal died
+signal boss_died
 
 # ============================================================================
 # CONSTANTS AND CONFIGURATION
@@ -212,4 +213,5 @@ func _on_hurtbox_received_damage(damage: int) -> void:
 func _on_health_health_depleted() -> void:
 	"""Handle enemy death"""
 	died.emit()
+	boss_died.emit()
 	queue_free()
