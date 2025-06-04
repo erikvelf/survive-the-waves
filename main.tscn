@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dvb6eriwqjid0"]
+[gd_scene load_steps=24 format=3 uid="uid://dvb6eriwqjid0"]
 
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
@@ -16,6 +16,10 @@
 [ext_resource type="Script" uid="uid://c54ojnpjcrri4" path="res://enemy_counter.gd" id="11_efxa6"]
 [ext_resource type="Texture2D" uid="uid://b61wgp7rvw3ar" path="res://art/BossHealthBar.png" id="13_ycdy4"]
 [ext_resource type="Script" uid="uid://c1wk2r0tg5hgj" path="res://game_over.gd" id="16_2cqfq"]
+[ext_resource type="AudioStream" uid="uid://clv8ps5k6t2oi" path="res://art/sounds/367504__sirkoto51__boss-battle-loop-2.mp3" id="17_82xsv"]
+[ext_resource type="Script" uid="uid://bfy3x8j5tyyhl" path="res://boss_music.gd" id="18_getpj"]
+[ext_resource type="AudioStream" uid="uid://cjwo4ubg5twdy" path="res://art/sounds/clash_royale_sudden_death.mp3" id="19_ryguw"]
+[ext_resource type="Script" uid="uid://wq672y281d33" path="res://music.gd" id="20_d13ii"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pmym8"]
 atlas = ExtResource("13_ycdy4")
@@ -236,12 +240,25 @@ curve = SubResource("Curve3D_272bh")
 [node name="SpawnPath" type="PathFollow3D" parent="SpawnLocation"]
 transform = Transform3D(-0.00721939, 0, -0.99997, 0, 1, 0, 0.99997, 0, -0.00721939, 0.0677381, 0, -54.5803)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="BossMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_82xsv")
+volume_db = -10.005
+parameters/looping = false
+script = ExtResource("18_getpj")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_ryguw")
+volume_db = -10.049
+parameters/looping = true
+script = ExtResource("20_d13ii")
 
 [connection signal="all_waves_completed" from="." to="UICanvasLayer/GaveOver" method="_on_main_all_waves_completed"]
 [connection signal="boss_spawned" from="." to="UICanvasLayer" method="_on_main_boss_spawned"]
+[connection signal="boss_spawned" from="." to="BossMusic" method="_on_main_boss_spawned"]
+[connection signal="boss_spawned" from="." to="Music" method="_on_main_boss_spawned"]
 [connection signal="enemies_remained" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_enemies_remained"]
 [connection signal="wave_cleared" from="." to="UICanvasLayer" method="_on_main_wave_cleared"]
 [connection signal="wave_started" from="." to="UICanvasLayer/WaveInfo/Label" method="_on_main_wave_started"]
 [connection signal="wave_started" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_wave_started"]
+[connection signal="wave_started" from="." to="BossMusic" method="_on_main_wave_started"]
 [connection signal="timeout" from="TimerCura" to="TimerCura" method="_on_timeout"]
