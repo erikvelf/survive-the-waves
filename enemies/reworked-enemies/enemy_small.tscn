@@ -21,6 +21,7 @@ radius = 0.89209
 
 [node name="EnemySmall" type="CharacterBody3D"]
 script = ExtResource("1_wsdo7")
+damage = 20
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("2_tfxh0")
