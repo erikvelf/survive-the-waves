@@ -15,15 +15,17 @@ signal wave_started(wave_number) # Emitted when a wave's enemies begin spawning
 signal wave_cleared(wave_number) # Emitted when all enemies of a wave are defeated
 signal all_waves_completed
 signal enemies_remained(count)
+signal boss_spawned
 
 # --- WAVE CONFIGURATION ---
 @export var wave_definitions = [
 	# {"small": 0, "medium": 0, "big": 1} # for testing the boss
+	#{"small": 5, "medium": 5, "big": 1} # for testing the boss
 	{"small": 5, "medium": 0, "big": 0},      # Wave 1
-	{"small": 10, "medium": 2, "big": 0},     # Wave 2
-	{"small": 15, "medium": 5, "big": 0},     # Wave 3
-	{"small": 25, "medium": 10, "big": 0},     # Wave 4
-	{"small": 30, "medium": 15, "big": 0},     # Wave 3
+	#{"small": 10, "medium": 2, "big": 0},     # Wave 2
+	#{"small": 15, "medium": 5, "big": 0},     # Wave 3
+	#{"small": 25, "medium": 10, "big": 0},     # Wave 4
+	#{"small": 30, "medium": 15, "big": 0},     # Wave 3
 	{"small": 100, "medium": 25, "big": 1}      # Final finishing wave
 ]
 
@@ -100,6 +102,8 @@ func spawn_wave(small_count: int, medium_count: int, big_count: int):
 		spawn_enemy(enemy_medium_scene)
 	for i in range(big_count):
 		spawn_enemy(enemy_big_scene)
+		print("Boss signal spawned")
+		boss_spawned.emit()
 	
 	print("Wave ", current_wave_index + 1, " spawned. Total enemies: ", enemies_alive_in_current_wave)
 	

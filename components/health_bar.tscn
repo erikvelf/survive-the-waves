@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://e0nxt3apwwgj"]
+[gd_scene load_steps=7 format=3 uid="uid://e0nxt3apwwgj"]
 
+[ext_resource type="Texture2D" uid="uid://b61wgp7rvw3ar" path="res://art/BossHealthBar.png" id="1_ov3o2"]
 [ext_resource type="Texture2D" uid="uid://buadpqhu2pcg8" path="res://art/HealthBar.png" id="1_pmym8"]
-[ext_resource type="Script" uid="uid://bcqjmcy8r817u" path="res://components/health_bar.gd" id="2_w6qbv"]
+[ext_resource type="Script" uid="uid://bcqjmcy8r817u" path="res://components/bosses_health_bar.gd" id="2_w6qbv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pmym8"]
-atlas = ExtResource("1_pmym8")
+atlas = ExtResource("1_ov3o2")
 region = Rect2(0, 96, 0, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w6qbv"]
