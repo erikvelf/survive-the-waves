@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://piy1tfdoydkx"]
+
+[ext_resource type="Texture2D" uid="uid://b61wgp7rvw3ar" path="res://art/BossHealthBar.png" id="1_3pbmx"]
+[ext_resource type="Script" uid="uid://bcqjmcy8r817u" path="res://components/bosses_health_bar.gd" id="2_mpxx7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmym8"]
+atlas = ExtResource("1_3pbmx")
+region = Rect2(0, 96, 0, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xmjf4"]
+atlas = ExtResource("1_3pbmx")
+region = Rect2(0, 0, 0, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guajd"]
+atlas = ExtResource("1_3pbmx")
+region = Rect2(0, 48, 0, 48)
+
+[node name="BossBar" type="TextureProgressBar"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -129.0
+offset_top = 3.0
+offset_right = 111.0
+offset_bottom = 51.0
+grow_horizontal = 2
+scale = Vector2(1.5, 1)
+value = 100.0
+texture_under = SubResource("AtlasTexture_pmym8")
+texture_over = SubResource("AtlasTexture_xmjf4")
+texture_progress = SubResource("AtlasTexture_guajd")
+script = ExtResource("2_mpxx7")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 49.3333
+offset_top = 12.0
+offset_right = 183.333
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(0.796829, 0.622894, 1, 1)
+text = "Udin Din Din Dun"
