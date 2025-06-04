@@ -16,6 +16,10 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var attack_windup_time: float = 0.8
 @export var attack_active_time: float = 0.1
 
+@export_group("Summoning")
+@export var support_enemy: PackedScene
+@export var support_spawn_distance: float = 5.0
+
 # ============================================================================
 # NODE REFERENCES - Cached for performance
 # ============================================================================
@@ -27,6 +31,8 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var attack_duration_timer: Timer = $AttackDurationTimer
 @onready var enable_hitbox_timer: Timer = $EnableHitboxTimer
 @onready var despawn_timer: Timer = $DespawnTimer
+@onready var summon_enemies_timer: Timer = $SummonEnemiesTimer
+@onready var summon_enemies_timer2: Timer = $SummonEnemiesTimer2
 @onready var health_component = $Health
 
 # ============================================================================
@@ -57,6 +63,7 @@ func _ready() -> void:
 	_find_and_cache_player()
 	_validate_required_components()
 	_setup_initial_state()
+	_connect_signals()
 
 func _initialize_enemy() -> void:
 	add_to_group("Boss")
@@ -77,8 +84,8 @@ func _validate_required_components() -> void:
 	var required_nodes = [
 		"HurtSound", "Model/AnimationPlayer", "PlayerDetector",
 		"Hitbox/CollisionShape3D", "AttackDurationTimer", 
-		"EnableHitboxTimer", "DespawnTimer", "Health",
-		"Hurtbox/CollisionShape3D"
+		"EnableHitboxTimer", "DespawnTimer", "SummonEnemiesTimer", 
+		"SummonEnemiesTimer2", "Health", "Hurtbox/CollisionShape3D"
 	]
 	
 	for node_path in required_nodes:
@@ -89,6 +96,17 @@ func _setup_initial_state() -> void:
 	"""Configure initial enemy state"""
 	current_state = EnemyState.MOVING_TO_PLAYER
 	target_velocity = Vector3.ZERO
+
+func _connect_signals() -> void:
+	"""Connect all timer and detection signals"""
+	player_detector.body_entered.connect(_on_player_detector_body_entered)
+	attack_duration_timer.timeout.connect(_on_attack_duration_timer_timeout)
+	enable_hitbox_timer.timeout.connect(_on_enable_hitbox_timer_timeout)
+	summon_enemies_timer.timeout.connect(_summon_support_enemies)
+	summon_enemies_timer2.timeout.connect(_summon_support_enemies)
+	$Hurtbox.received_damage.connect(_on_hurtbox_received_damage)
+	health_component.health_depleted.connect(_on_health_health_depleted)
+	despawn_timer.timeout.connect(_on_despawn_timer_timeout)
 
 # ============================================================================
 # PHYSICS PROCESSING - Pure physics execution
@@ -201,9 +219,15 @@ func _enter_dead_state() -> void:
 		attack_duration_timer.timeout.disconnect(_on_attack_duration_timer_timeout)
 	if enable_hitbox_timer.is_connected("timeout", _on_enable_hitbox_timer_timeout):
 		enable_hitbox_timer.timeout.disconnect(_on_enable_hitbox_timer_timeout)
+	if summon_enemies_timer.is_connected("timeout", _summon_support_enemies):
+		summon_enemies_timer.timeout.disconnect(_summon_support_enemies)
+	if summon_enemies_timer2.is_connected("timeout", _summon_support_enemies):
+		summon_enemies_timer2.timeout.disconnect(_summon_support_enemies)
 	
 	attack_duration_timer.stop()
 	enable_hitbox_timer.stop()
+	summon_enemies_timer.stop()
+	summon_enemies_timer2.stop()
 	
 	# Disable player detection to prevent new attacks
 	if player_detector.is_connected("body_entered", _on_player_detector_body_entered):
@@ -225,6 +249,53 @@ func _enter_dead_state() -> void:
 # ============================================================================
 # COMBAT SYSTEM - Attack sequence management
 # ============================================================================
+func _summon_support_enemies() -> void:
+	"""Spawn support enemies on both sides of this enemy at mirrored positions"""
+	# Validate that support enemy scene is configured
+	if not support_enemy:
+		push_error("EnemyBig: Cannot summon support enemies - support_enemy scene not configured")
+		return
+	
+	# Calculate spawn positions relative to enemy's current rotation
+	var enemy_right_direction = Vector3(cos(rotation.y - PI/2), 0, sin(rotation.y - PI/2)).normalized()
+	var enemy_left_direction = Vector3(cos(rotation.y + PI/2), 0, sin(rotation.y + PI/2)).normalized()
+	
+	var right_spawn_position = global_position + (enemy_right_direction * support_spawn_distance)
+	var left_spawn_position = global_position + (enemy_left_direction * support_spawn_distance)
+	
+	# Spawn right support enemy
+	var right_support_enemy = support_enemy.instantiate()
+	if not right_support_enemy:
+		push_error("EnemyBig: Failed to instantiate right support enemy from scene")
+		return
+	
+	# Spawn left support enemy
+	var left_support_enemy = support_enemy.instantiate()
+	if not left_support_enemy:
+		push_error("EnemyBig: Failed to instantiate left support enemy from scene")
+		# Clean up the right enemy that was successfully created
+		right_support_enemy.queue_free()
+		return
+	
+	# Position the support enemies
+	right_support_enemy.global_position = right_spawn_position
+	left_support_enemy.global_position = left_spawn_position
+	
+	# Add support enemies to the scene tree at the same level as this enemy
+	var parent_node = get_parent()
+	if not parent_node:
+		push_error("EnemyBig: Cannot add support enemies - no valid parent node found")
+		right_support_enemy.queue_free()
+		left_support_enemy.queue_free()
+		return
+	
+	parent_node.add_child(right_support_enemy)
+	parent_node.add_child(left_support_enemy)
+	
+	# Ensure both support enemies face the same direction as the boss
+	right_support_enemy.rotation.y = rotation.y
+	left_support_enemy.rotation.y = rotation.y
+
 func _start_attack_sequence() -> void:
 	"""Begin the attack sequence"""
 	current_state = EnemyState.ATTACKING
