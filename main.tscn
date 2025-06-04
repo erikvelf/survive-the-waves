@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dvb6eriwqjid0"]
+[gd_scene load_steps=20 format=3 uid="uid://dvb6eriwqjid0"]
 
 [ext_resource type="Script" uid="uid://crkdgeet27vim" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfvxipi58raj" path="res://world/world.tscn" id="1_ig7tw"]
@@ -12,16 +12,14 @@
 [ext_resource type="Script" uid="uid://cwujp017laqb4" path="res://wave_info.gd" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://dq6hnw5copg0d" path="res://ui_canvas_layer.gd" id="9_w48qg"]
 [ext_resource type="Script" uid="uid://dr07cdihbvxf0" path="res://components/health_bar.gd" id="10_dg77c"]
+[ext_resource type="PackedScene" uid="uid://piy1tfdoydkx" path="res://components/boss_bar.tscn" id="10_vivmo"]
 [ext_resource type="Script" uid="uid://c54ojnpjcrri4" path="res://enemy_counter.gd" id="11_efxa6"]
 [ext_resource type="Texture2D" uid="uid://b61wgp7rvw3ar" path="res://art/BossHealthBar.png" id="13_ycdy4"]
+[ext_resource type="Script" uid="uid://c1wk2r0tg5hgj" path="res://game_over.gd" id="16_2cqfq"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ycdy4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmym8"]
 atlas = ExtResource("13_ycdy4")
-region = Rect2(0, 0, 0, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_w48qg"]
-atlas = ExtResource("13_ycdy4")
-region = Rect2(0, 48, 0, 48)
+region = Rect2(0, 96, 0, 48)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_7mycd"]
 
@@ -50,6 +48,7 @@ wait_time = 5.0
 [node name="EnemiesContainer" type="Node3D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("2_0xm2m")]
+damage = 40
 
 [node name="TimerCura" type="Timer" parent="."]
 wait_time = 10.0
@@ -59,8 +58,10 @@ boost = ExtResource("8_4c57u")
 
 [node name="UICanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("9_w48qg")
+boss_health_bar_scene = ExtResource("10_vivmo")
 
 [node name="TextureProgressBar" parent="UICanvasLayer" node_paths=PackedStringArray("character") instance=ExtResource("6_7mycd")]
+texture_under = SubResource("AtlasTexture_pmym8")
 script = ExtResource("10_dg77c")
 character = NodePath("../../Player")
 
@@ -103,39 +104,48 @@ layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -247.0
-offset_right = 153.0
+offset_left = -200.0
+offset_right = 200.0
 offset_bottom = 100.0
 grow_horizontal = 2
 
-[node name="TextureProgressBar" parent="UICanvasLayer/BossBars" instance=ExtResource("6_7mycd")]
-layout_mode = 1
-anchors_preset = 5
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = -129.0
-offset_top = 3.0
-offset_right = 111.0
-offset_bottom = 51.0
-grow_vertical = 1
-scale = Vector2(1.5, 1)
-texture_over = SubResource("AtlasTexture_ycdy4")
-texture_progress = SubResource("AtlasTexture_w48qg")
-
-[node name="Label" type="Label" parent="UICanvasLayer/BossBars"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -11.0
-offset_top = 15.0
-offset_right = 123.0
-offset_bottom = 38.0
+[node name="GaveOver" type="Control" parent="UICanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.815892, 0.612417, 1, 1)
-text = "Udin Din Din Dun"
+grow_vertical = 2
+script = ExtResource("16_2cqfq")
+
+[node name="Label" type="Label" parent="UICanvasLayer/GaveOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.5
+offset_top = -24.5
+offset_right = 68.5
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 50
+text = "Congratulaziuoni!
+Bosco protetto!"
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 2
+
+[node name="ColorRect" type="ColorRect" parent="UICanvasLayer/GaveOver"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.458824)
 
 [node name="PlaceHolders" type="Node3D" parent="."]
 
@@ -226,9 +236,12 @@ curve = SubResource("Curve3D_272bh")
 [node name="SpawnPath" type="PathFollow3D" parent="SpawnLocation"]
 transform = Transform3D(-0.00721939, 0, -0.99997, 0, 1, 0, 0.99997, 0, -0.00721939, 0.0677381, 0, -54.5803)
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="all_waves_completed" from="." to="UICanvasLayer/GaveOver" method="_on_main_all_waves_completed"]
 [connection signal="boss_spawned" from="." to="UICanvasLayer" method="_on_main_boss_spawned"]
-[connection signal="boss_spawned" from="." to="UICanvasLayer/BossBars/TextureProgressBar" method="_on_main_boss_spawned"]
 [connection signal="enemies_remained" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_enemies_remained"]
+[connection signal="wave_cleared" from="." to="UICanvasLayer" method="_on_main_wave_cleared"]
 [connection signal="wave_started" from="." to="UICanvasLayer/WaveInfo/Label" method="_on_main_wave_started"]
 [connection signal="wave_started" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_wave_started"]
 [connection signal="timeout" from="TimerCura" to="TimerCura" method="_on_timeout"]
