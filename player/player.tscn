@@ -82,6 +82,7 @@ stream = ExtResource("6_g6k8r")
 [node name="HitSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_boad6")
 
+[connection signal="health_depleted" from="Health" to="." method="_on_health_health_depleted"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 
 [editable path="PlayerModel"]

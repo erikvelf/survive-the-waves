@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+signal player_died
+
 const MAX_SPEED: float = 7.0
 const MIN_SPEED: float = 5.0
 var speed: float = 7.0
@@ -11,6 +13,7 @@ const JUMP_VELOCITY = 5 # 4.5
 @onready var playerAnimation: AnimationPlayer = $PlayerModel/AnimationPlayer # Nodo animazione dentro al PlayerModel
 #@onready var hitbox: Hitbox = $Hitbox
 @onready var hitbox: CollisionShape3D = $Hitbox/CollisionShape3D
+var is_dead = false
 
 # Sistema di togliere il hitbox quando non stai menando i mob
 func set_is_hitbox_disabled(collision_shape: CollisionShape3D, value: bool):
@@ -33,6 +36,8 @@ func _ready() -> void:
 
 func _input(event):
 	# Gira l'intero Player nodo (CharacterBody3D)
+	if is_dead:
+		return
 	if event is InputEventMouseMotion:
 		rotate_y(deg_to_rad(-event.relative.x * sensibility))
 		pivot.rotate_x(deg_to_rad(event.relative.y * sensibility))
@@ -40,7 +45,10 @@ func _input(event):
 		pivot.rotation.x = clamp(pivot.rotation.x, deg_to_rad(-45), deg_to_rad((45)))
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	# Add the gravis_dead
+	if is_dead:
+		return
+		
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
@@ -72,3 +80,10 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 		
+
+
+func _on_health_health_depleted() -> void:
+	is_dead = true
+	player_died.emit()
+	$PlayerModel.hide()
+	set_is_hitbox_disabled(hitbox, true)
