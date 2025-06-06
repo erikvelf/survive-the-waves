@@ -113,7 +113,7 @@ offset_right = 200.0
 offset_bottom = 100.0
 grow_horizontal = 2
 
-[node name="GaveOver" type="Control" parent="UICanvasLayer"]
+[node name="GameOver" type="Control" parent="UICanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,17 +122,34 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("16_2cqfq")
 
-[node name="Label" type="Label" parent="UICanvasLayer/GaveOver"]
+[node name="GameCompleted" type="Control" parent="UICanvasLayer/GameOver"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UICanvasLayer/GameOver/GameCompleted"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.458824)
+
+[node name="Label" type="Label" parent="UICanvasLayer/GameOver/GameCompleted"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -68.5
-offset_top = -24.5
-offset_right = 68.5
-offset_bottom = 24.5
+offset_left = -213.0
+offset_top = -70.5
+offset_right = 213.0
+offset_bottom = 70.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -142,14 +159,57 @@ Bosco protetto!"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="ColorRect" type="ColorRect" parent="UICanvasLayer/GaveOver"]
+[node name="PlayerDied" type="Control" parent="UICanvasLayer/GameOver"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.458824)
+
+[node name="ColorRect" type="ColorRect" parent="UICanvasLayer/GameOver/PlayerDied"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.32045, 1.65449e-07, 9.62615e-08, 0.458824)
+
+[node name="Label" type="Label" parent="UICanvasLayer/GameOver/PlayerDied"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -213.0
+offset_top = -70.5
+offset_right = 213.0
+offset_bottom = 70.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 50
+text = "Sei morto!"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="RestartButton" type="Button" parent="UICanvasLayer/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = 94.0
+offset_right = 59.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Gioca di nuovo
+"
 
 [node name="PlaceHolders" type="Node3D" parent="."]
 
@@ -252,7 +312,7 @@ volume_db = -10.049
 parameters/looping = true
 script = ExtResource("20_d13ii")
 
-[connection signal="all_waves_completed" from="." to="UICanvasLayer/GaveOver" method="_on_main_all_waves_completed"]
+[connection signal="all_waves_completed" from="." to="UICanvasLayer/GameOver" method="_on_main_all_waves_completed"]
 [connection signal="boss_spawned" from="." to="UICanvasLayer" method="_on_main_boss_spawned"]
 [connection signal="boss_spawned" from="." to="BossMusic" method="_on_main_boss_spawned"]
 [connection signal="boss_spawned" from="." to="Music" method="_on_main_boss_spawned"]
@@ -261,4 +321,5 @@ script = ExtResource("20_d13ii")
 [connection signal="wave_started" from="." to="UICanvasLayer/WaveInfo/Label" method="_on_main_wave_started"]
 [connection signal="wave_started" from="." to="UICanvasLayer/EnemyCounter" method="_on_main_wave_started"]
 [connection signal="wave_started" from="." to="BossMusic" method="_on_main_wave_started"]
+[connection signal="player_died" from="Player" to="UICanvasLayer/GameOver" method="_on_player_player_died"]
 [connection signal="timeout" from="TimerCura" to="TimerCura" method="_on_timeout"]
