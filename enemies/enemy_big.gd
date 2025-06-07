@@ -19,6 +19,7 @@ var GRAVITY = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export_group("Summoning")
 @export var support_enemy: PackedScene
 @export var support_spawn_distance: float = 5.0
+const support_enemy_group = "SupportEnemy"
 
 # ============================================================================
 # NODE REFERENCES - Cached for performance
@@ -199,6 +200,11 @@ func _enter_dead_state() -> void:
 	# Set state to dead to stop all AI processing
 	current_state = EnemyState.DEAD
 	
+	# Kill all support enemies
+	var support_enemies = get_tree().get_nodes_in_group(support_enemy_group)
+	for enemy in support_enemies:
+		enemy.queue_free()
+	
 	# Stop all movement immediately
 	target_velocity = Vector3.ZERO
 	velocity = Vector3.ZERO
@@ -289,6 +295,8 @@ func _summon_support_enemies() -> void:
 		left_support_enemy.queue_free()
 		return
 	
+	right_support_enemy.add_to_group(support_enemy_group)
+	left_support_enemy.add_to_group(support_enemy_group)
 	parent_node.add_child(right_support_enemy)
 	parent_node.add_child(left_support_enemy)
 	
