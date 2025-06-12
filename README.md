@@ -52,6 +52,9 @@ https://freesound.org/people/EminYILDIRIM/sounds/587603/
 Enemy hit sound: Enemy_Hit.wav by D001447733 -- https://freesound.org/s/464623/
 -- License: Attribution 3.0
 
+In game boss music Boss Battle Loop #2 by Sirkoto51
+https://freesound.org/s/367504/ License: Attribution 4.0
+
 # How to create animated models for godot
 
 1. Download any .gbl or .fbx file
