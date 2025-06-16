@@ -1,5 +1,7 @@
 # Brainrot Survival
 
+![video](./readme-assets/demo-with-boss-music-compressed.mp4)
+
 Godot 4 3D game where you are fighting waves of enemies to then defeat the final
 boss. These enemies from the game are based off the Italian Brainrot and this
 game was made as a school project in around 2 weeks.
